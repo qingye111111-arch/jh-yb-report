@@ -1,4 +1,4 @@
-﻿const http = require("http");
+const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
@@ -6,7 +6,7 @@ const os = require("os");
 const url = require("url");
 
 const PORT = 8080;
-const ROOT = "C:\\Users\\Administrator\\Desktop\\光大\\光大环境投标报告";
+const ROOT = "D:\\光大环境投标报告";
 const MIME = {".html":"text/html; charset=utf-8",".json":"application/json",".pdf":"application/pdf",".png":"image/png",".jpg":"image/jpeg",".css":"text/css",".js":"text/javascript"};
 
 function getIP(){var ifs=os.networkInterfaces();for(var n of Object.keys(ifs))for(var i of ifs[n])if(i.family==="IPv4"&&!i.internal)return i.address;return "127.0.0.1"}
