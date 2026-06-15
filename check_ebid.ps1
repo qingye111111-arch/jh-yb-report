@@ -21,9 +21,10 @@ $core_kw = @(
   "控制电缆","补偿导线","电线电缆","屏蔽电缆","信号电缆","电力电缆",
   "变频器","软启动","配电箱","开关柜","称重","汽车衡","电子秤","地磅",
   "PH计","电导率","溶解氧","余氯","浊度","水质分析","在线分析",
-  "检定","校验","校准"
+  "检定","校验","校准",
+  "发电机","发电机组","电动机","变压器","汽轮机","风机","水泵","压缩机","高低压柜","高低压开关柜","控制柜"
 )
-$maybe_kw = @("备品备件","备件","阀类","阀门","密封件","管件","法兰","紧固件","滤芯","密封垫","机务备件","水处理备件","加工件","管材","钢材","五金","电气","维修","检修","改造","安装","调试","维护","保养","更换","电动头","执行器","气动头","定位器","阀门配件","密封垫片")
+$maybe_kw = @("备品备件","备件","阀类","阀门","密封件","管件","法兰","紧固件","滤芯","密封垫","机务备件","水处理备件","加工件","管材","钢材","五金","电气","电动头","执行器","气动头","定位器","阀门配件","密封垫片")
 function Test-Instrument($title){foreach($kw in $core_kw){if($title.IndexOf($kw)-ge 0){return "core"}}foreach($kw in $maybe_kw){if($title.IndexOf($kw)-ge 0){return "maybe"}}return "no"}
 function Safe-Download($url,[int]$retries=3){for($i=0;$i-lt$retries;$i++){try{$wc=New-Object System.Net.WebClient;$wc.Encoding=[System.Text.Encoding]::UTF8;$wc.Headers.Add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");return [System.Text.Encoding]::UTF8.GetString($wc.DownloadData($url))}catch{if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $null}}}}
 function Safe-DownloadFile($url,$path,[int]$retries=3){for($i=0;$i-lt$retries;$i++){try{$wc=New-Object System.Net.WebClient;$wc.Headers.Add("User-Agent","Mozilla/5.0");$wc.DownloadFile($url,$path);return $true}catch{if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $false}}}}
@@ -105,6 +106,8 @@ if (Test-Path $jsonFile) {
         else { Write-Host "⚠️ 推送失败" }
     } catch { Write-Host "⚠️ 推送出错" }
 }
+
+
 
 
 
