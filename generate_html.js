@@ -12,3 +12,4 @@ var h = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta nam
 
 fs.writeFileSync(path.join(dir, "index.html"), h, "utf-8");
 console.log("HTML generated: " + h.length + " bytes from " + df);
+
