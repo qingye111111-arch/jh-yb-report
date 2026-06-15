@@ -12,7 +12,7 @@ const MIME = {".html":"text/html; charset=utf-8",".json":"application/json",".pd
 function getIP(){var ifs=os.networkInterfaces();for(var n of Object.keys(ifs))for(var i of ifs[n])if(i.family==="IPv4"&&!i.internal)return i.address;return "127.0.0.1"}
 
 const srv = http.createServer((req, res) => {
-  var p = url.parse(req.url).pathname;
+  try{var p = decodeURIComponent(url.parse(req.url).pathname)}catch(e){var p = url.parse(req.url).pathname}
   if (p === "/") { p = "/index.html"; }
 
   // Refresh endpoint
@@ -65,4 +65,5 @@ srv.listen(PORT, "0.0.0.0", () => {
   console.log("");
   console.log("==========================================");
 });
+
 
