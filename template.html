@@ -22,7 +22,7 @@
 <div class="top"><div><h1>🌾 金湖仪表 · 光大投标管家</h1><div class="sub">金湖县仪器仪表企业 · 光大环境项目智能筛选 | 每日凌晨自动更新</div></div></div>
 <div class="container"><div class="summary-card"><div class="summary" id="summaryLine">加载中...</div><div class="summary-stats" id="summaryStats"></div></div>
 <div class="date-bar">📅 按日期筛选：<select id="dateSelect" onchange="switchDate()"></select></div>
-<div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 搜索项目" oninput="filter()"><select id="typeFilter" onchange="filter()"><option value="high" selected>🏆 金湖适配</option><option value="all">📋 全部可投</option><option value="core">✅ 推荐投标</option><option value="maybe">⚠️ 需核实</option></select><span style="font-size:11px;color:#999" id="resultCount"></span></div>
+<div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 搜索项目" oninput="filter()"><select id="typeFilter" onchange="filter()"><option value="all" selected>📋 全部可投</option><option value="core">✅ 推荐投标</option><option value="maybe">⚠️ 需核实</option></select><span style="font-size:11px;color:#999" id="resultCount"></span></div>
 <div style="background:#fff;border-radius:8px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center"><a href="/refresh" id="refreshBtn" style="display:inline-block;background:#1a5276;color:#fff;text-decoration:none;padding:10px 30px;border-radius:6px;font-size:14px;font-weight:bold">⟳ 一键刷新数据</a><div style="font-size:11px;color:#999;margin-top:5px">每天凌晨 0 点自动更新</div></div>
 <div class="tag-bar" id="tagBar"></div><div class="content-area" id="content"><div class="loading">加载中...</div></div></div>
 <div class="footer">金湖仪表 · 光大环境投标筛选工具</div>
@@ -49,10 +49,12 @@ if(mb.length>0){h+='<div class="section"><h2 class="yellow-hdr">⚠️ 需核实
 document.getElementById('content').innerHTML=h||'<div class="no-data">没有匹配的项目</div>'}function recalcTags(){var ai=(window.__data.core||[]).map(function(it){it._type='core';return it}).concat((window.__data.maybe||[]).map(function(it){it._type='maybe';return it}));if(sd!=='all')ai=ai.filter(function(it){return it.pt===sd});var c={};ai.forEach(function(it){mT(it).forEach(function(t){c[t]=(c[t]||0)+1})});var s=Object.keys(c).sort(function(a,b){return c[b]-c[a]}),bar=document.getElementById('tagBar');bar.innerHTML='<span class="tag active" data-tag="" onclick="tT(this)">\uD83C\uDFF7\uFE0F 全部</span>';s.slice(0,18).forEach(function(k){bar.innerHTML+='<span class="tag" data-tag="'+k+'" onclick="tT(this)">'+k+' ('+c[k]+')</span>'});window.__ai=ai;window.__data._cnt=c}
 function rI(it){var info='🏢 '+(it.bu||'')+(it.co?' · 👤 '+it.co:'')+(it.ph?' · 📞 '+it.ph:'')+(it.pt?' · 📅 '+it.pt:'')+(it.dl?' · ⏰ 截止：'+it.dl:'')
 var tags=mT(it),th='';if(tags.length>0||mJ(it)){th='<div class="tags">';if(mJ(it))th+='<span class="tag-jh">🏆 金湖适配</span>';tags.forEach(function(t){th+='<span class="tag-type">'+t+'</span>'});th+='</div>'}
-var pl='';if(it.pf&&(location.hostname=="localhost"||location.hostname.indexOf("192.168.")===0)){pl=' · <a href="附件/'+it.pf+'" target="_blank" style="color:#2980b9;text-decoration:none;font-size:12px;background:#e8f0fe;padding:2px 6px;border-radius:3px">📎 PDF</a>'}
+var pl='';if(it.pf){pl=' · <a href="附件/'+it.pf+'" target="_blank" style="color:#2980b9;text-decoration:none;font-size:12px;background:#e8f0fe;padding:2px 6px;border-radius:3px">📎 PDF</a>'}
 return '<div class="item"><div><span class="pid">['+(it.pi||'')+']</span> <span class="tit">'+it.ti+'</span></div><div class="detail">'+info+pl+'</div>'+th+'</div>'}
 function switchDate(){sd=document.getElementById('dateSelect').value;recalcTags();filter();}
 function init(){LOADED[DATA.date]=DATA;render();var sel=document.getElementById('dateSelect');sel.innerHTML='<option value="all">📅 全部日期</option>';var dt=[];if(DATA.core)DATA.core.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});if(DATA.maybe)DATA.maybe.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});dt.sort().reverse();dt.forEach(function(d){var o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});sel.value='all'}
 init();
 </script></body></html>
+
+
 
