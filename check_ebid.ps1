@@ -43,7 +43,7 @@ $c=@();$m=@();$n=@()
 foreach($x in $all){switch(Test-Instrument $x.title){"core"{$c+=$x};"maybe"{$m+=$x};"no"{$n+=$x}}}
 Write-Host ("[推荐投标] $($c.Count)  [需核实] $($m.Count)  [不相关] $($n.Count)")
 $cd=@();$i=0
-foreach($x in $c){$i++;Write-Host("  [$i/$($c.Count)] ")-NoNewline;$d=Get-Detail $x.url;Write-Host $d.p -NoNewline;if($d.f){$pf="https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id="+$d.f}else{$pf=""};$cd+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt};Start-Sleep -Milliseconds 300}
+foreach($x in $c){$i++;Write-Host("  [$i/$($c.Count)] ")-NoNewline;$d=Get-Detail $x.url;Write-Host $d.p -NoNewline;if($d.f){$pf=DnPdf $d.f $d.p $x.title}else{$pf=""};$cd+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt};Start-Sleep -Milliseconds 300}
 $md=@()
 foreach($x in $m){$d=Get-Detail $x.url;if($d.f){$pf="https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id="+$d.f}else{$pf=""};$md+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt}}
 $json=@{date=$script:today;time=(Get-Date -Format "yyyy-MM-dd HH:mm");total=$all.Count;cc=$c.Count;mc=$m.Count;nc=$n.Count;core=$cd;maybe=$md}|ConvertTo-Json -Depth 3
@@ -106,6 +106,7 @@ if (Test-Path $jsonFile) {
         else { Write-Host "⚠️ 推送失败" }
     } catch { Write-Host "⚠️ 推送出错" }
 }
+
 
 
 
