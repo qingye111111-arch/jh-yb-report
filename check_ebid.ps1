@@ -1,7 +1,7 @@
-﻿param([string]$OutputDir = "D:\光大环境投标报告")
+﻿﻿param([string]$OutputDir = "D:\光大环境投标报告")
 . .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
-$script:today = Get-Date -Format "yyyy-MM-dd"
+$script:today = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
 $pdfDir = Join-Path $OutputDir "附件"
 if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
 if (-not (Test-Path $pdfDir)) { New-Item -ItemType Directory -Path $pdfDir -Force | Out-Null }
@@ -65,61 +65,29 @@ git commit -m "每日更新 $script:today" --allow-empty 2>$null
 git push origin main 2>&1
 Write-Host "✅ GitHub Pages 已更新"
 
-# --- Server酱微信推送（含手机访问链接）---
+# --- 微信推送（仅链接）---
 $sendKey = $serverChanKey
 $jsonFile = Join-Path $OutputDir ("data_" + $script:today + ".json")
 if (Test-Path $jsonFile) {
-    $jsonData = Get-Content $jsonFile -Encoding UTF8 | ConvertFrom-Json
-    # 获取本机局域网 IP
+    $todayData = Get-Content $jsonFile -Encoding UTF8 | ConvertFrom-Json
     $localIP = ""
     $ipInfo = Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notlike "*Loopback*" -and $_.PrefixOrigin -ne "WellKnown" -and $_.IPAddress -notlike "169.*" }
     if ($ipInfo) { $localIP = ($ipInfo | Select-Object -First 1).IPAddress }
     $serverUrl = "http://" + $localIP + ":8080"
-    $titleMsg = "金湖仪表光大投标日报 " + $jsonData.date
-    $contentMsg = ""
-    $contentMsg += "总公告：" + $jsonData.total + " 条"
-    $contentMsg += " | 推荐：" + $jsonData.cc + " 项"
-    $contentMsg += " | 核实：" + $jsonData.mc + " 项`n`n"
-    $contentMsg += "━━━ 推荐投标 ━━━`n"
-    if ($jsonData.core.Count -gt 0) {
-        $count = [Math]::Min(10, $jsonData.core.Count)
-        for ($i = 0; $i -lt $count; $i++) {
-            $item = $jsonData.core[$i]
-            $num = $i + 1
-            $contentMsg += "  " + $num + ". " + $item.ti + "`n"
-        }
-    }
-    if ($jsonData.maybe.Count -gt 0) {
-        $contentMsg += "`n── 需核实 " + $jsonData.mc + " 项 ──`n"
-        $mcount = [Math]::Min(5, $jsonData.maybe.Count)
-        for ($i = 0; $i -lt $mcount; $i++) {
-            $contentMsg += "  - " + $jsonData.maybe[$i].ti + "`n"
-        }
-    }
-    $contentMsg += "`n━━━━━━━━━━━━━━━━`n"
-    $contentMsg += "📱 手机查看完整报告（含PDF）:`n"
-    $contentMsg += $serverUrl + "`n"
-    $contentMsg += "（手机须连同一个WiFi）"
+    if (-not $localIP) { $serverUrl = "http://localhost:8080" }
+    
+    $titleMsg = "光大投标 · 每日报告 " + $todayData.date
+    $contentMsg = "电脑访问：\n"
+    $contentMsg += "http://localhost:8080/\n\n"
+    $contentMsg += "手机访问（同WiFi）：\n"
+    $contentMsg += $serverUrl + "\n\n"
+    $contentMsg += "GitHub Pages：\n"
+    $contentMsg += $githubPagesUrl
+    
     try {
         $body = @{title=$titleMsg; desp=$contentMsg}
         $resp = Invoke-RestMethod -Uri "https://sctapi.ftqq.com/$sendKey.send" -Method Post -Body $body
-        if ($resp.code -eq 0) { Write-Host "✅ 微信推送成功" }
-        else { Write-Host "⚠️ 推送失败" }
-    } catch { Write-Host "⚠️ 推送出错" }
+        if ($resp.code -eq 0) { Write-Host "微信推送成功" }
+        else { Write-Host "推送失败" }
+    } catch { Write-Host "推送出错" }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
