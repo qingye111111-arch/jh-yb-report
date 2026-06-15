@@ -16,23 +16,31 @@ const srv = http.createServer((req, res) => {
   if (p === "/") { p = "/index.html"; }
 
   // Refresh endpoint
-  // Refresh endpoint - async (background refresh)
   if (p === "/refresh") {
     res.writeHead(200, {"Content-Type":"text/html; charset=utf-8"});
-    res.write("<html><head><meta charset='utf-8'><title>刷新中</title>");
-    res.write("<style>body{font-family:sans-serif;text-align:center;padding:40px}h2{color:#1a5276}</style>");
-    res.write("</head><body>");
-    res.write("<h2>🌾 光大投标管家</h2>");
-    res.write("<p>刷新已启动，后台约需 1-2 分钟</p>");
-    res.write("<p>请稍后手动按 F5 刷新页面查看结果</p>");
-    res.write("<p><a href='/index.html'>返回首页</a></p>");
-    res.write("</body></html>");
-    res.end();
-    // Run refresh in background
-    exec('powershell -ExecutionPolicy Bypass -File "' + ROOT + '\\check_ebid.ps1"', {cwd:ROOT, timeout:180000}, function() {});
+    res.write("<html><head><meta charset='utf-8'><title>刷新中</title><meta http-equiv='refresh' content='3;url=/index.html'><style>body{font-family:sans-serif;text-align:center;padding:40px}h2{color:#1a5276}.ok{color:green}.fail{color:red}</style></head><body>");
+    res.write("<h2>🌾 金湖仪表 · 光大投标</h2><p>正在刷新数据，请稍候...</p><pre>");
+
+    exec('powershell -ExecutionPolicy Bypass -File "' + ROOT + '\\check_ebid.ps1"', {cwd:ROOT, timeout:180000}, (err, stdout, stderr) => {
+      res.write(stdout + "\n");
+      if (err) { res.write("<span class='fail'>❌ 刷新失败</span>\n"); }
+      else {
+        // Generate HTML
+        exec('node "' + ROOT + '\\generate_html.js"', {cwd:ROOT}, (err2, so2, se2) => {
+          res.write(so2 + "\n");
+          if (!err2) res.write("<span class='ok'>✅ 刷新完成！</span>\n");
+          else res.write("<span class='fail'>HTML生成失败</span>\n");
+          res.write("</pre><p>3秒后自动返回...</p>");
+          res.write("<p><a href='/index.html' style='color:#2980b9'>立即返回</a></p>");
+          res.write("</body></html>");
+          res.end();
+        });
+      }
+    });
     return;
   }
-// Serve static files
+
+  // Serve static files
   var fp = path.join(ROOT, p);
   if (!fp.startsWith(ROOT)) { res.writeHead(403); res.end("Forbidden"); return; }
   fs.readFile(fp, (err, data) => {
