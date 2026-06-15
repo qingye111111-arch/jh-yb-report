@@ -1,4 +1,5 @@
 ﻿param([string]$OutputDir = "$env:USERPROFILE\Desktop\光大\光大环境投标报告")
+. .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
 $script:today = Get-Date -Format "yyyy-MM-dd"
 $pdfDir = Join-Path $OutputDir "附件"
@@ -47,8 +48,18 @@ Write-Host "JSON 已保存"
 & "node" "generate_html.js" 2>&1 | Out-Null
 Write-Host "✅ HTML 报告已生成"
 
+# --- 推送到 GitHub Pages ---
+Write-Host "正在推送到 GitHub..."
+$remoteUrl = "https://${gitHubUser}:${gitHubToken}@github.com/${gitHubUser}/${gitHubRepo}.git"
+git remote add origin $remoteUrl 2>$null
+git remote set-url origin $remoteUrl
+git add -A
+git commit -m "每日更新 $script:today" --allow-empty 2>$null
+git push origin main 2>&1 | Out-Null
+Write-Host "✅ GitHub Pages 已更新"
+
 # --- Server酱微信推送（含手机访问链接）---
-$sendKey = "SCT364802TDswGUcy8Xz8fdXXIXSVLMZlu"
+$sendKey = $serverChanKey
 $jsonFile = Join-Path $OutputDir ("data_" + $script:today + ".json")
 if (Test-Path $jsonFile) {
     $jsonData = Get-Content $jsonFile -Encoding UTF8 | ConvertFrom-Json
@@ -89,3 +100,5 @@ if (Test-Path $jsonFile) {
         else { Write-Host "⚠️ 推送失败" }
     } catch { Write-Host "⚠️ 推送出错" }
 }
+
+
