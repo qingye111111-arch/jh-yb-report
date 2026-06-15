@@ -283,7 +283,7 @@ var DATA={
     "total":  240,
     "nc":  175,
     "mc":  25,
-    "time":  "2026-06-15 21:43",
+    "time":  "2026-06-15 21:57",
     "date":  "2026-06-15",
     "core":  [
                  {
@@ -1393,7 +1393,7 @@ var DATA={
 };var KWL=["热电偶","热电阻","温度计","双金属","温度变送器","压力表","压力变送器","差压变送器","压力开关","流量计","电磁流量计","涡街流量计","超声波流量计","液位计","液位变送器","磁翻板","雷达液位计","数显仪表","调节仪","显示仪","变送器","传感器","执行机构","电动执行器","调节阀","气动执行器","CEMS","烟气","气体检测","气体分析","分析仪","气体报警仪","氨逃逸","DCS","PLC","模块","控制器","PLC控制","DCS控制","可编程","卡件","安全阀","截止阀","球阀","蝶阀","闸阀","电磁阀","止回阀","减压阀","电仪","仪控","仪表","仪器","自动化","控制电缆","补偿导线","屏蔽电缆","开关柜","配电箱","变频器","软启动","称重","汽车衡","电子秤","PH计","溶解氧","浊度","水质分析","在线分析","检定","校验","校准","发电机","发电机组","电动机","变压器","汽轮机","风机","水泵","压缩机"];var LOADED={};var curDate='';var aT='';var sd='all';
 function mJ(it){var t=(it.ti+' '+(it.bu||'')).toLowerCase();for(var i=0;i<KWL.length;i++)if(t.indexOf(KWL[i].toLowerCase())>=0)return true;return false}
 function mT(it){var r=[],t=it.ti+' '+(it.bu||'');for(var i=0;i<KWL.length;i++)if(t.indexOf(KWL[i])>=0){r.push(KWL[i]);if(r.length>=4)break}return r}
-function render(){var ai=[];if(DATA.core)DATA.core.forEach(function(it){it._type='core';ai.push(it)});if(DATA.maybe)DATA.maybe.forEach(function(it){it._type='maybe';ai.push(it)});if(DATA.no)DATA.no.forEach(function(it){it._type='no';ai.push(it)});if(DATA.no)DATA.no.forEach(function(it){it._type='no';ai.push(it)})
+function render(){var ai=[];if(DATA.core)DATA.core.forEach(function(it){it._type='core';ai.push(it)});if(DATA.maybe)DATA.maybe.forEach(function(it){it._type='maybe';ai.push(it)});if(DATA.no)DATA.no.forEach(function(it){it._type='no';ai.push(it)})
 var jc=ai.filter(function(it){return mJ(it)}).length
 document.getElementById('summaryLine').innerHTML='<strong>报告日期：'+DATA.date+'</strong> 共 '+DATA.total+' 条公告 | ✅ 推荐 '+DATA.cc+' | ⚠️ 核实 '+DATA.mc
 document.getElementById('summaryStats').innerHTML='<span class="stat green">🏆 金湖适配 '+jc+' 项</span><span class="stat blue">📋 推荐投标 '+DATA.cc+' 项</span><span class="stat yellow">⚠️ 需核实 '+DATA.mc+' 项</span><span class="stat gray">❌ 不相关 '+DATA.nc+' 项</span>'
@@ -1406,9 +1406,9 @@ function tT(el){var tag=el.getAttribute('data-tag');if(aT===tag){aT='';document.
 function filter(){var q=document.getElementById('searchInput').value.trim().toLowerCase(),tf=document.getElementById('typeFilter').value,ai=window.__ai;if(!ai)return
 var fl=ai.filter(function(it){if(tf==='core'&&it._type!=='core')return false;if(tf==='maybe'&&it._type!=='maybe')return false;if(tf==='no'&&it._type!=='no')return false;if(tf==='high'&&!mJ(it))return false;if(aT&&mT(it).indexOf(aT)===-1)return false;if(sd!=='all'&&it.pt!==sd)return false;if(q&&(it.ti+' '+it.bu+' '+(it.pi||'')).toLowerCase().indexOf(q)===-1)return false;return true})
 document.getElementById('resultCount').textContent='共 '+fl.length+' 项'
-var co=fl.filter(function(it){return it._type==='core'}),mb=fl.filter(function(it){return it._type==='maybe'}),nf=fl.filter(function(it){return it._type==='no'}),h='' class="section"><h2 class="green-hdr">✅ 推荐投标 ('+co.length+'项)</h2>';co.forEach(function(it){h+=rI(it)});h+='</div>'}
+var co=fl.filter(function(it){return it._type==='core'}),mb=fl.filter(function(it){return it._type==='maybe'}),nf=fl.filter(function(it){return it._type==='no'}),h='';if(co.length>0){h+='<div class="section"><h2 class="green-hdr">✅ 推荐投标 ('+co.length+'项)</h2>';co.forEach(function(it){h+=rI(it)});h+='</div>'}
 if(mb.length>0){h+='<div class="section"><h2 class="yellow-hdr">⚠️ 需核实 ('+mb.length+'项)</h2>';mb.forEach(function(it){h+=rI(it)});h+='</div>'}if(nf.length>0){h+='<div class="section"><h2 style="background:#e2e3e5;color:#383d41;padding:8px 14px;border-radius:4px;font-size:13px;margin-bottom:6px">❌ 其他 ('+nf.length+'项)</h2>';nf.forEach(function(it){h+=rI(it)});h+='</div>'}
-document.getElementById('content').innerHTML=h||'<div class="no-data">没有匹配的项目</div>'}function recalcTags(){var ai=(window.__data.core||[]).map(function(it){it._type='core';return it}).concat((window.__data.maybe||[]).map(function(it){it._type='maybe';return it}));if(sd!=='all')ai=ai.filter(function(it){return it.pt===sd});var c={};ai.forEach(function(it){mT(it).forEach(function(t){c[t]=(c[t]||0)+1})});var s=Object.keys(c).sort(function(a,b){return c[b]-c[a]}),bar=document.getElementById('tagBar');bar.innerHTML='<span class="tag active" data-tag="" onclick="tT(this)">\uD83C\uDFF7\uFE0F 全部</span>';s.slice(0,18).forEach(function(k){bar.innerHTML+='<span class="tag" data-tag="'+k+'" onclick="tT(this)">'+k+' ('+c[k]+')</span>'});window.__ai=ai;window.__data._cnt=c}
+document.getElementById('content').innerHTML=h||'<div class="no-data">没有匹配的项目</div>'}function recalcTags(){var ai=(window.__data.core||[]).map(function(it){it._type='core';return it}).concat((window.__data.maybe||[]).map(function(it){it._type='maybe';return it})).concat((window.__data.no||[]).map(function(it){it._type='no';return it})));if(sd!=='all')ai=ai.filter(function(it){return it.pt===sd});var c={};ai.forEach(function(it){mT(it).forEach(function(t){c[t]=(c[t]||0)+1})});var s=Object.keys(c).sort(function(a,b){return c[b]-c[a]}),bar=document.getElementById('tagBar');bar.innerHTML='<span class="tag active" data-tag="" onclick="tT(this)">\uD83C\uDFF7\uFE0F 全部</span>';s.slice(0,18).forEach(function(k){bar.innerHTML+='<span class="tag" data-tag="'+k+'" onclick="tT(this)">'+k+' ('+c[k]+')</span>'});window.__ai=ai;window.__data._cnt=c}
 function rI(it){var info='🏢 '+(it.bu||'')+(it.co?' · 👤 '+it.co:'')+(it.ph?' · 📞 '+it.ph:'')+(it.pt?' · 📅 '+it.pt:'')+(it.dl?' · ⏰ 截止：'+it.dl:'')
 var tags=mT(it),th='';if(tags.length>0||mJ(it)){th='<div class="tags">';tags.forEach(function(t){th+='<span class="tag-type">'+t+'</span>'});th+='</div>'}
 var pl='';if(it.pf){pl=' · <a href="附件/'+it.pf+'" target="_blank" style="color:#2980b9;text-decoration:none;font-size:12px;background:#e8f0fe;padding:2px 6px;border-radius:3px">📎 PDF</a>'}
@@ -1417,6 +1417,9 @@ function copyPID(p){navigator.clipboard.writeText(p).catch(function(){prompt('�
 function init(){LOADED[DATA.date]=DATA;render();var sel=document.getElementById('dateSelect');sel.innerHTML='<option value="all">📅 全部日期</option>';var dt=[];if(DATA.core)DATA.core.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});if(DATA.maybe)DATA.maybe.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});dt.sort().reverse();dt.forEach(function(d){var o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});sel.value=DATA.date;sd=DATA.date;filter()}
 init();
 </script></body></html>
+
+
+
 
 
 
