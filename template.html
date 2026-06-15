@@ -54,7 +54,1109 @@
     btn.textContent='📂 查看文件夹';
   }
 })();
-</script></div></div><div class="footer">金湖仪表 · 光大环境投标筛选工具</div><script>var DATA = //__DATA__;var KWL=["热电偶","热电阻","温度计","双金属","温度变送器","压力表","压力变送器","差压变送器","压力开关","流量计","电磁流量计","涡街流量计","超声波流量计","液位计","液位变送器","磁翻板","雷达液位计","数显仪表","调节仪","显示仪","变送器","传感器","执行机构","电动执行器","调节阀","气动执行器","CEMS","烟气","气体检测","气体分析","分析仪","气体报警仪","氨逃逸","DCS","PLC","模块","控制器","PLC控制","DCS控制","可编程","卡件","安全阀","截止阀","球阀","蝶阀","闸阀","电磁阀","止回阀","减压阀","电仪","仪控","仪表","仪器","自动化","控制电缆","补偿导线","屏蔽电缆","开关柜","配电箱","变频器","软启动","称重","汽车衡","电子秤","PH计","溶解氧","浊度","水质分析","在线分析","检定","校验","校准"];var LOADED={};var curDate='';var aT='';function mJ(it){var t=(it.ti+' '+(it.bu||'')).toLowerCase();for(var i=0;i<KWL.length;i++)if(t.indexOf(KWL[i].toLowerCase())>=0)return true;return false}function mT(it){var r=[],t=it.ti+' '+(it.bu||'');for(var i=0;i<KWL.length;i++)if(t.indexOf(KWL[i])>=0){r.push(KWL[i]);if(r.length>=4)break}return r}function render(date){curDate=date;var data=LOADED[date];if(!data){document.getElementById('content').innerHTML='<div class="no-data">暂无数据</div>';return}var ai=[];if(data.core)data.core.forEach(function(it){it._type='core';ai.push(it)});if(data.maybe)data.maybe.forEach(function(it){it._type='maybe';ai.push(it)});var jc=ai.filter(function(it){return mJ(it)}).length;document.getElementById('summaryLine').innerHTML='<strong>报告日期：'+data.date+'</strong> 共 '+data.total+' 条公告 | ✅ 推荐 '+data.cc+' | ⚠️ 核实 '+data.mc;document.getElementById('summaryStats').innerHTML='<span class="stat green">🏆 金湖适配 '+jc+' 项</span><span class="stat blue">📋 推荐投标 '+data.cc+' 项</span><span class="stat yellow">⚠️ 需核实 '+data.mc+' 项</span><span class="stat gray">❌ 不相关 '+data.nc+' 项</span>';var counts={};ai.forEach(function(it){mT(it).forEach(function(t){counts[t]=(counts[t]||0)+1})});var sorted=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]}),bar=document.getElementById('tagBar');bar.innerHTML='<span class="tag active" data-tag="" onclick="tT(this)">🏷️ 全部</span>';sorted.slice(0,18).forEach(function(k){bar.innerHTML+='<span class="tag" data-tag="'+k+'" onclick="tT(this)">'+k+' ('+counts[k]+')</span>'});window.__ai=ai;window.__data=data;filter()}function tT(el){var tag=el.getAttribute('data-tag');if(aT===tag){aT='';document.querySelectorAll('.tag').forEach(function(t){t.className='tag'});document.querySelector('.tag[data-tag=""]').className='tag active'}else{aT=tag;document.querySelectorAll('.tag').forEach(function(t){t.className='tag'});el.className='tag active'}filter()}function filter(){var q=document.getElementById('searchInput').value.trim().toLowerCase(),tf=document.getElementById('typeFilter').value,ai=window.__ai;if(!ai)return;var fl=ai.filter(function(it){if(tf==='core'&&it._type!=='core')return false;if(tf==='maybe'&&it._type!=='maybe')return false;if(tf==='high'&&!mJ(it))return false;if(aT&&mT(it).indexOf(aT)===-1)return false;if(q&&(it.ti+' '+it.bu+' '+(it.pi||'')).toLowerCase().indexOf(q)===-1)return false;return true});document.getElementById('resultCount').textContent='共 '+fl.length+' 项';var co=fl.filter(function(it){return it._type==='core'}),mb=fl.filter(function(it){return it._type==='maybe'}),h='';if(co.length>0){h+='<div class="section"><h2 class="green-hdr">✅ 推荐投标 ('+co.length+'项)</h2>';co.forEach(function(it){h+=rI(it)});h+='</div>'}if(mb.length>0){h+='<div class="section"><h2 class="yellow-hdr">⚠️ 需核实 ('+mb.length+'项)</h2>';mb.forEach(function(it){h+=rI(it)});h+='</div>'}document.getElementById('content').innerHTML=h||'<div class="no-data">没有匹配的项目</div>'}function rI(it){var info='🏢 '+(it.bu||'')+(it.co?' · 👤 '+it.co:'')+(it.ph?' · 📞 '+it.ph:'')+(it.pt?' · 📅 '+it.pt:'')+(it.dl?' · ⏰ 截止：'+it.dl:'');var tags=mT(it),th='';if(tags.length>0||mJ(it)){th='<div class="tags">';if(mJ(it))th+='<span class="tag-jh">🏆 金湖适配</span>';tags.forEach(function(t){th+='<span class="tag-type">'+t+'</span>'});th+='</div>'}var pl='';if(it.pf){pl=' · <a href="https://raw.githubusercontent.com/qingye111111-arch/jh-yb-report/main/附件/'+it.pf+'" target="_blank" style="color:#2980b9;text-decoration:none;font-size:12px;background:#e8f0fe;padding:2px 6px;border-radius:3px">📎 PDF</a>'}return '<div class="item"><div><span class="pid">['+(it.pi||'')+']</span> <span class="tit">'+it.ti+'</span></div><div class="detail">'+info+pl+'</div>'+th+'</div>'}function switchDate(){render(document.getElementById('dateSelect').value)}function init(){LOADED[DATA.date]=DATA;render(DATA.date);var sel=document.getElementById('dateSelect'),today=new Date();for(var d=0;d<14;d++){var dt=new Date(today);dt.setDate(dt.getDate()-d);var ds=dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);if(LOADED[ds]){var o=document.createElement('option');o.value=ds;o.textContent=d===0?ds+' (今日)':d===1?ds+' (昨日)':ds;sel.appendChild(o)}}sel.value=DATA.date}init();</script></body></html>
+</script></div></div><div class="footer">金湖仪表 · 光大环境投标筛选工具</div><script>var DATA = {
+    "time":  "2026-06-15 20:15",
+    "maybe":  [
+                  {
+                      "pi":  "GDSW-GX-2026-2274",
+                      "co":  "李天松",
+                      "ti":  "丹东光水污水处理有限公司综合楼办公室改造、楼前增加中水展示池询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019ea6701424678b",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18341350357",
+                      "bu":  "丹东光水水务有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7488",
+                      "co":  "严定城",
+                      "ti":  "光大环保能源（惠东）有限公司2026年7月份机务备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb9b6516f3e78",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "0752-5920654",
+                      "bu":  "光大环保能源（惠东）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2288",
+                      "co":  "王琦",
+                      "ti":  "济南水务起步区厂办公楼门牌及医学中心厂设备标识牌（含安装）采购询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb432e7dd001d",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "0531-85993733",
+                      "bu":  "光大水务（济南）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-0686",
+                      "co":  "邱洪伟",
+                      "ti":  "大连旅顺三涧堡污水处理有限公司框架断路器采购更换安装服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb5b3a7081fa1",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "0411-86680909",
+                      "bu":  "光水水务（大连）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2321",
+                      "co":  "周磊",
+                      "ti":  "鲁东区域管理中心光大水务（淄博）有限公司中水厂大流量滤芯年度采购询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb98e53825250",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "05336120097",
+                      "bu":  "光大水务（淄博）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-1707",
+                      "co":  "董金钊",
+                      "ti":  "济南章丘区光水环境有限公司五厂磁混凝沉淀池1#剩余污泥泵、2#吸砂泵维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019e903642fd4ccd",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13884986864",
+                      "bu":  "济南章丘区光水环境有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7425",
+                      "co":  "王蕾",
+                      "ti":  "光大生态环保（济南）有限公司2026年07月份备品备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb0afdc11416d",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13706406826",
+                      "bu":  "光大生态环保（济南）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7111",
+                      "co":  "刘芬",
+                      "ti":  "苏州吴江光大环保能源有限公司一期小苏打系统喷口改造设备采购询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e49ff93019e6d86b8e44c74",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13807066393",
+                      "bu":  "苏州吴江光大环保能源有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7525",
+                      "co":  "苏莹莹",
+                      "ti":  "光大环保能源（沈阳）有限公司阀类询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019ebadc98aa5d2d",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "15712409335",
+                      "bu":  "光大环保能源（沈阳）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3261",
+                      "co":  "吴茜宇",
+                      "ti":  "苏南区域管理中心光大生物能源（盱眙）有限公司地坑螺旋箱体及底板更换服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb06ea01d3bb3",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18251507800",
+                      "bu":  "光大生物能源（盱眙）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2325",
+                      "co":  "王艳涛",
+                      "ti":  "滨州水务（滨州公司）6月空调（含安装）询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eba758c1e4520",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18054357727",
+                      "bu":  "光大水务（滨州）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7469",
+                      "co":  "张喜锋",
+                      "ti":  "光大环保能源（莱芜）有限公司2#炉折焰角水冷壁及减温器集箱更换询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eb5bac9272d9b",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18354318500",
+                      "bu":  "光大环保能源（莱芜）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3276",
+                      "co":  "乔为市",
+                      "ti":  "光大城乡再生能源（淮安）有限公司生物质料场消防炮维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eb4afdeee1a6e",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13396211021",
+                      "bu":  "光大城乡再生能源（淮安）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2266",
+                      "co":  "马顺",
+                      "ti":  "天津滨海新区环塘污水处理有限公司北塘污水处理厂B系磁混凝加载搅拌器维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019ea6073d0e5b9c",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18920120269",
+                      "bu":  "天津滨海新区环塘污水处理有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2260",
+                      "co":  "马顺",
+                      "ti":  "天津滨海新区环塘污水处理有限公司港东新城污水处理厂2#臭氧发生器及控制柜维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019ea5bd7cd24eea",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18920120269",
+                      "bu":  "天津滨海新区环塘污水处理有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7416",
+                      "co":  "王蕾",
+                      "ti":  "光大生态环保（济南）有限公司光伏系统维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eaf1620b854ac",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13706406826",
+                      "bu":  "光大生态环保（济南）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7475",
+                      "co":  "冯梦",
+                      "ti":  "光大环保能源（东海）有限公司2026年7月份备品备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eba53dd8a5519",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13675286868",
+                      "bu":  "光大环保能源（东海）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3233",
+                      "co":  "黄晓玲",
+                      "ti":  "光大城乡再生能源（钟祥）有限公司高压阀门检修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eab2cfb5a2e83",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "15872938719",
+                      "bu":  "光大城乡再生能源（钟祥）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7456",
+                      "co":  "张皓",
+                      "ti":  "光大环保能源（蓝田）有限公司净水器维护询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb4cb9fcb7ea4",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13759946133",
+                      "bu":  "光大环保能源（蓝田）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7462",
+                      "co":  "宋步云",
+                      "ti":  "苏州吴江光大环保能源有限公司一期水处理厌氧进水管更换询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb56cc12332bd",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "15206253392",
+                      "bu":  "苏州吴江光大环保能源有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7429",
+                      "co":  "邓国鹏",
+                      "ti":  "光大环保能源（五华）有限公司吸附式干燥机维护保养服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb0dc17e1775b",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18813862602",
+                      "bu":  "光大环保能源（五华）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7539",
+                      "co":  "周加星",
+                      "ti":  "光大环保能源（修水）有限公司2026年7月机务备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019ebf0d63a365af",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "17770862535",
+                      "bu":  "光大环保能源（修水）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7537",
+                      "co":  "周加星",
+                      "ti":  "光大环保能源（修水）有限公司2026年7月汽机备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019ebe9b94755abd",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "17770862535",
+                      "bu":  "光大环保能源（修水）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7530",
+                      "co":  "周加星",
+                      "ti":  "光大环保能源（修水）有限公司2026年7月水处理备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019ebb178d477d64",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "17770862535",
+                      "bu":  "光大环保能源（修水）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7430",
+                      "co":  "贾彦雯",
+                      "ti":  "费县光大环保能源有限公司2026年7月备品备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eb145f7c308d9",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13953908027",
+                      "bu":  "费县光大环保能源有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7463",
+                      "co":  "贾彦雯",
+                      "ti":  "费县光大环保能源有限公司电梯无线对讲系统安装服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eb565c7fd23db",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "13953908027",
+                      "bu":  "费县光大环保能源有限公司"
+                  },
+                  {
+                      "pi":  "EBET-GX-2026-0092",
+                      "co":  "周志琳",
+                      "ti":  "光大环境科技（中国）有限公司潍坊能源系统设备优化提升项目中心化验室设备更新及改造询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb53b61d4026f",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18151009500",
+                      "bu":  "光大环境科技（中国）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2221",
+                      "co":  "王泳",
+                      "ti":  "济南水务起步区厂载客电梯维护保养询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019ea6333a0d263a",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "18653129206",
+                      "bu":  "光大水务（济南）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7517",
+                      "co":  "黄伊俏",
+                      "ti":  "光大环保能源（富平）有限公司2026年7月水处理备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019ebab2880d534a",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "09138237457",
+                      "bu":  "光大环保能源（富平）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7524",
+                      "co":  "黄伊俏",
+                      "ti":  "光大环保能源（富平）有限公司2026年7月机务备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019ebacd2d173d55",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "09138237457",
+                      "bu":  "光大环保能源（富平）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3284",
+                      "co":  "冯伟",
+                      "ti":  "光大生物能源（盱眙）有限公司水冷壁管局部更换服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb5de558c3e51",
+                      "pt":  "2026-06-15",
+                      "dl":  "",
+                      "ph":  "15152340005",
+                      "bu":  "光大生物能源（盱眙）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7460",
+                      "co":  "陈耀荣",
+                      "ti":  "光大环保能源（鹰潭）有限公司垃圾仓#2消防炮委外维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb55ffa603e36",
+                      "pt":  "2026-06-14",
+                      "dl":  "",
+                      "ph":  "13367015228",
+                      "bu":  "光大环保能源（鹰潭）有限公司"
+                  },
+                  {
+                      "pi":  "ZBZZ-GX-2026-0457",
+                      "co":  "陈锦涛",
+                      "ti":  "光大环保技术装备〔常州〕有限公司甘洛项目卸料门及垃圾吊抓斗检修门询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb994045f6352",
+                      "pt":  "2026-06-13",
+                      "dl":  "",
+                      "ph":  "15695199936",
+                      "bu":  "光大环保技术装备〔常州〕有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3257",
+                      "co":  "叶海波",
+                      "ti":  "光大绿色环保城乡再生能源（古田）有限公司数采仪维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb041b2897ef3",
+                      "pt":  "2026-06-13",
+                      "dl":  "",
+                      "ph":  "15059328900",
+                      "bu":  "光大绿色环保城乡再生能源（古田）有限公司"
+                  },
+                  {
+                      "pi":  "HBNYGC-GZ-2026-0726",
+                      "co":  "付锦",
+                      "ti":  "邹城光大环保能源有限公司农村生活垃圾清运勾臂车维修服务采购招标公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb5df13884c0f",
+                      "pt":  "2026-06-13",
+                      "dl":  "",
+                      "ph":  "075583119936",
+                      "bu":  "光采招标（深圳）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3302",
+                      "co":  "吴卡娜",
+                      "ti":  "光大绿保固废处置（温岭）有限公司备品备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eba9392e60067",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15888682478",
+                      "bu":  "光大绿保固废处置（温岭）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7124",
+                      "co":  "韩秀伟",
+                      "ti":  "光大环保能源（济南）有限公司二期捞渣机围堰及一期石灰浆制备间改造询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019ea5df1b645f53",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15275311870",
+                      "bu":  "光大环保能源（济南）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-0365",
+                      "co":  "王昕雅",
+                      "ti":  "光大水务（北京）有限公司广告制作安装服务年度采购服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019ea67bdda10784",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13151235187",
+                      "bu":  "光大水务（北京）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7459",
+                      "co":  "杨雪",
+                      "ti":  "齐河光大环保能源有限公司2026年6月份机械类备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb555fd4f30c2",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13361285161",
+                      "bu":  "齐河光大环保能源有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2258",
+                      "co":  "宋瑜",
+                      "ti":  "光大水务（莱阳）有限公司转子泵维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eaf1360bb71e5",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "19033656366",
+                      "bu":  "光大水务（莱阳）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3244",
+                      "co":  "杨晓斌",
+                      "ti":  "光大绿色环保城乡再生能源（临洮）有限公司6月份备品备件及物资（第二次）询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaf57c78b2a20",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "18093268301",
+                      "bu":  "光大绿色环保城乡再生能源（临洮）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7139",
+                      "co":  "卢磊",
+                      "ti":  "光大环保能源（天门）有限公司2026年6月办公电脑、打印机维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb09b24d45be0",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13235521162",
+                      "bu":  "光大环保能源（天门）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2303",
+                      "co":  "马腾",
+                      "ti":  "鲁西区域济南章丘区光水环境有限公司五厂硫酸亚铁、双氧水加药罐及配套加药系统安装询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb49be2242d13",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "0531-85993713",
+                      "bu":  "济南章丘区光水环境有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2296",
+                      "co":  "朱一枚",
+                      "ti":  "光大水处理（江阴）有限公司西利厂脱水机房控制柜触摸屏更换询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb05330a6007b",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "86032753",
+                      "bu":  "光大水处理（江阴）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7144",
+                      "co":  "陈卉",
+                      "ti":  "光大环保能源（镇江）有限公司#1焚烧炉耐火材料维修工程询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019e7cd0aacc18c4",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15952858120",
+                      "bu":  "光大环保能源（镇江）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-2270",
+                      "co":  "韩坤",
+                      "ti":  "光大生物能源（怀远）有限公司除尘器内盖板、给料机法兰组合密封板等加工（2026年5至6月）询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69db4a483019e1f0f0d997890",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15178351101",
+                      "bu":  "光大生物能源（怀远）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7396",
+                      "co":  "王雅蕾",
+                      "ti":  "光大环保能源（沅江）有限公司2026年7月机务备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb0bca9894284",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "18684711820",
+                      "bu":  "光大环保能源（沅江）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7397",
+                      "co":  "王雅蕾",
+                      "ti":  "光大环保能源（沅江）有限公司2026年7月钢材询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb098e9fd062a",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "18684711820",
+                      "bu":  "光大环保能源（沅江）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3267",
+                      "co":  "单晨旭",
+                      "ti":  "光大绿色环保固废处置（黄石）有限公司柴油消防泵维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb5476f991750",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13236500991",
+                      "bu":  "光大绿色环保固废处置（黄石）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3286",
+                      "co":  "赵锴",
+                      "ti":  "光大绿色环保再生能源（沂源）有限公司生物质行车抓斗维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb5edbac62485",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13355200820",
+                      "bu":  "光大绿色环保再生能源（沂源）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7323",
+                      "co":  "陈海东",
+                      "ti":  "光大环保能源（东方）有限公司绿化取水抽水泵及配套设备安装施工询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaa3587527bee",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "18887466128",
+                      "bu":  "光大环保能源（东方）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3221",
+                      "co":  "史书",
+                      "ti":  "光大城乡再生能源（绵竹）有限公司垃圾仓垃圾吊检修口技改服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaa6e2a1e03ba",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "18090756750",
+                      "bu":  "光大城乡再生能源（绵竹）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7389",
+                      "co":  "胡讯胜",
+                      "ti":  "光大环保能源（长沙）有限公司大门道闸维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eab329e303949",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15873826399",
+                      "bu":  "光大环保能源（长沙）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2265",
+                      "co":  "马顺",
+                      "ti":  "天津滨海新区环塘污水处理有限公司北塘污水处理厂磁混凝磁粉上料系统维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019ea5e88e8b0458",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "18920120269",
+                      "bu":  "天津滨海新区环塘污水处理有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7321",
+                      "co":  "冯坤",
+                      "ti":  "光大环保能源（邳州）有限公司空调移机及维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019e959d374203ba",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13022537999",
+                      "bu":  "光大环保能源（邳州）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-1811",
+                      "co":  "王彬",
+                      "ti":  "莒县光水水务有限公司5月生产改造服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19db4a5b1019e06a183dd7e10",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13181191935",
+                      "bu":  "莒县光水水务有限公司"
+                  },
+                  {
+                      "pi":  "ZBZZGC-GZ-2026-0161",
+                      "co":  "黄植",
+                      "ti":  "四川省ZBWB2610项目设备安装工程施工招标公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb09d83a76c70",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "0755-83989839",
+                      "bu":  "光采招标（深圳）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2298",
+                      "co":  "范家银",
+                      "ti":  "光大水务（南京）有限公司浦口厂、中水厂电动三轮工具车维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb0bcbd98160c",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15996477867",
+                      "bu":  "光大水务（南京）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7412",
+                      "co":  "刘红芳",
+                      "ti":  "光大环保能源（泗阳）有限公司2026年7月机务备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaf3ff22b2824",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13851377627",
+                      "bu":  "光大环保能源（泗阳）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3235",
+                      "co":  "高冰冰",
+                      "ti":  "光大生物能源（六安）有限公司2026年06月备件物资询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eab31e0e30e3d",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13733009506",
+                      "bu":  "光大生物能源（六安）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7433",
+                      "co":  "周加星",
+                      "ti":  "光大环保能源（修水）有限公司故障车辆维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb430a6981806",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "17770862535",
+                      "bu":  "光大环保能源（修水）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7424",
+                      "co":  "郭宏杰",
+                      "ti":  "光大环保能源（兰考）有限公司2026年06月份厂区雨水排放阀改造询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb085fdd23d80",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "13839959020",
+                      "bu":  "光大环保能源（兰考）有限公司"
+                  },
+                  {
+                      "pi":  "HBNYGC-GZ-2026-0727",
+                      "co":  "赵如波",
+                      "ti":  "光大环保能源（潍坊）有限公司一期空压机节能改造技改服务招标公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb4379fb2514b",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "0755-83119935",
+                      "bu":  "光采招标（深圳）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7301",
+                      "co":  "闫芯赫",
+                      "ti":  "光大城洁环保能源（张家口）有限公司2026年6月生产备品备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaf2dcbca265b",
+                      "pt":  "2026-06-12",
+                      "dl":  "",
+                      "ph":  "15028525731",
+                      "bu":  "光大城洁环保能源（张家口）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3126",
+                      "co":  "张举生",
+                      "ti":  "光大城乡再生能源（柘城）有限公司垃圾卸料门维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb09d6e800694",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "18136563629",
+                      "bu":  "光大城乡再生能源（柘城）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2280",
+                      "co":  "邵春秋",
+                      "ti":  "光大水务（南京）有限公司浦口厂细格栅及砂水分离器维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eab0e68be1d13",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "13813010090",
+                      "bu":  "光大水务（南京）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3175",
+                      "co":  "郑中许",
+                      "ti":  "光大环保固废处置（新沂）有限公司备品备件及生产物资询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eaa01e0e52268",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "15852428810",
+                      "bu":  "光大环保固废处置（新沂）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-2989",
+                      "co":  "郑中许",
+                      "ti":  "光大环保固废处置（新沂）有限公司计算机、打印机设备维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019e8d909d5967c9",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "15852428810",
+                      "bu":  "光大环保固废处置（新沂）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3265",
+                      "co":  "陈旭燕",
+                      "ti":  "光大城乡再生能源（社旗）有限公司生物质锅炉备件维修加工询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb0b12dcd0882",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "15188479533",
+                      "bu":  "光大城乡再生能源（社旗）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3262",
+                      "co":  "陈旭燕",
+                      "ti":  "光大城乡再生能源（社旗）有限公司电机维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb09bf5955bfc",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "15188479533",
+                      "bu":  "光大城乡再生能源（社旗）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2065",
+                      "co":  "孙瑞雷",
+                      "ti":  "光大水务（德州）有限公司、光大水务（陵县）有限公司电气设备检修及配电室安全检查服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019e873d22ff03a7",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "13793466158",
+                      "bu":  "光大水务（德州）有限公司"
+                  },
+                  {
+                      "pi":  "HBNY-GX-2026-7403",
+                      "co":  "孔虹宇",
+                      "ti":  "苏州区域管理中心锡东能源卸料门维修施工询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eaf14ebbc49c1",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "15210138339",
+                      "bu":  "无锡锡东环保能源有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2183",
+                      "co":  "徐嗣明",
+                      "ti":  "沈阳浑南光水水务有限公司水源热泵机组保养询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019e871a34747334",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "13998826765",
+                      "bu":  "沈阳浑南光水水务有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-1700",
+                      "co":  "邱洪伟",
+                      "ti":  "大连光水马栏河水务有限公司CN6长柄滤头封堵维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019ea9f816da01b4",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "0411-86680909",
+                      "bu":  "光水水务（大连）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3250",
+                      "co":  "王敬武",
+                      "ti":  "光大环保危废处置（淄博）有限公司2026~2027年度电机维修服务询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaf4787d228a4",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "13287068805",
+                      "bu":  "光大环保危废处置（淄博）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3266",
+                      "co":  "魏祥顺",
+                      "ti":  "光大绿色环保再生能源（沂源）有限公司测厚仪及质检手持打印机维修询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb0b47f0362b4",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "18463911301",
+                      "bu":  "光大绿色环保再生能源（沂源）有限公司"
+                  },
+                  {
+                      "pi":  "LSHB-GX-2026-3198",
+                      "co":  "段兴国",
+                      "ti":  "光大城乡再生能源（中江）有限公司2026年06月常规备件询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019ea607283d764e",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "18096212798",
+                      "bu":  "光大城乡再生能源（中江）有限公司"
+                  },
+                  {
+                      "pi":  "GDSW-GX-2026-2198",
+                      "co":  "邱洪伟",
+                      "ti":  "光水水务（大连）有限公司2台提砂风机采购更换询价公告",
+                      "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019e8beae5323ca6",
+                      "pt":  "2026-06-11",
+                      "dl":  "",
+                      "ph":  "0411-86680909",
+                      "bu":  "光水水务（大连）有限公司"
+                  }
+              ],
+    "core":  [
+                 {
+                     "pi":  "HBNYGC-GZ-2026-0740",
+                     "co":  "刘洪北",
+                     "ti":  "光大环保能源（沈阳）有限公司DCS系统卡件及配套机柜采购招标公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019ec94a617540e7",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "18102256825",
+                     "bu":  "光采招标（深圳）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3309",
+                     "co":  "范金宇",
+                     "ti":  "光大绿色环保热电（宿迁）有限公司6月电仪备件及化水药剂询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019ec8bca8212da6",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "13812402016",
+                     "bu":  "光大绿色环保热电（宿迁）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7420",
+                     "co":  "曾宪鑫",
+                     "ti":  "莒县光大环保能源有限公司2号炉CEMS系统水调（水分校准）服务询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eaf71754a601a",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "18663377388",
+                     "bu":  "莒县光大环保能源有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7502",
+                     "co":  "彭程",
+                     "ti":  "南京区域光大环保能源（九江）有限公司CEMS系统升级后整体验收询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eba76815a5e29",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "13770644606",
+                     "bu":  "光大环保能源（九江）有限公司"
+                 },
+                 {
+                     "pi":  "GDSW-GX-2026-1831",
+                     "co":  "朱一枚",
+                     "ti":  "光大水务（江阴）有限公司各厂软启、执行机构维修（滨江厂、滨江二厂、高新区厂）询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eaf4fe03c4098",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "86032753",
+                     "bu":  "光大水务（江阴）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7477",
+                     "co":  "严定城",
+                     "ti":  "光大环保能源（惠东）有限公司2026年7月份仪控备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb987367e1248",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "0752-5920654",
+                     "bu":  "光大环保能源（惠东）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7505",
+                     "co":  "苏莹莹",
+                     "ti":  "光大环保能源（沈阳）有限公司CEMS备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eba7e3c2566ae",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "15712409335",
+                     "bu":  "光大环保能源（沈阳）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7492",
+                     "co":  "苏莹莹",
+                     "ti":  "光大环保能源（沈阳）有限公司安全阀询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb9e34eb439a7",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "15712409335",
+                     "bu":  "光大环保能源（沈阳）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7518",
+                     "co":  "苏莹莹",
+                     "ti":  "光大环保能源（沈阳）有限公司DCS备件、PLC控制系统备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019ebab6f3e56da4",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "15712409335",
+                     "bu":  "光大环保能源（沈阳）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7503",
+                     "co":  "宋步云",
+                     "ti":  "苏州光大环境卫生管理有限公司西侧汽车衡升级改造询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eba7b904e2d8b",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "15206253392",
+                     "bu":  "苏州光大环境卫生管理有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7538",
+                     "co":  "周加星",
+                     "ti":  "光大环保能源（修水）有限公司2026年7月仪控及电气备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019ebeb9cda564ae",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "17770862535",
+                     "bu":  "光大环保能源（修水）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7485",
+                     "co":  "淳于昌坤",
+                     "ti":  "光大环保能源（潍坊）有限公司压力表、气体报警仪及气体检测仪检定询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eb994e102475c",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "15054101710",
+                     "bu":  "光大环保能源（潍坊）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7390",
+                     "co":  "杨雪",
+                     "ti":  "齐河光大环保能源有限公司2026年6月份电仪备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eab8f862a4876",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "13361285161",
+                     "bu":  "齐河光大环保能源有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7526",
+                     "co":  "黄伊俏",
+                     "ti":  "光大环保能源（富平）有限公司2026年7月电仪备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019ebaf54e4d4462",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "09138237457",
+                     "bu":  "光大环保能源（富平）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3270",
+                     "co":  "周华义",
+                     "ti":  "光大城乡再生能源（夏邑）有限公司电动执行机构检测维修服务询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb960ce415bfd",
+                     "pt":  "2026-06-15",
+                     "dl":  "",
+                     "ph":  "15791828668",
+                     "bu":  "光大城乡再生能源（夏邑）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3260",
+                     "co":  "陈秀波",
+                     "ti":  "光大绿色环保城乡再生能源（丰县）有限公司雾化器丹弗斯变频器维修（2台）询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab69e73301f019eb049dd920b86",
+                     "pt":  "2026-06-13",
+                     "dl":  "",
+                     "ph":  "13705226041",
+                     "bu":  "光大绿色环保城乡再生能源（丰县）有限公司"
+                 },
+                 {
+                     "pi":  "HBNYGC-GZ-2026-0732",
+                     "co":  "刘志鹏",
+                     "ti":  "光大环保能源（东方）有限公司#1焚烧线烟气净化系统大修服务招标公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eb607c09b05dc",
+                     "pt":  "2026-06-13",
+                     "dl":  "",
+                     "ph":  "15902038675",
+                     "bu":  "光采招标（深圳）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3306",
+                     "co":  "吴卡娜",
+                     "ti":  "光大绿保固废处置（温岭）有限公司便携式VOC气体检测仪(霍尼韦尔PGM-7340)故障维修询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019ebadcc6287122",
+                     "pt":  "2026-06-13",
+                     "dl":  "",
+                     "ph":  "15888682478",
+                     "bu":  "光大绿保固废处置（温岭）有限公司"
+                 },
+                 {
+                     "pi":  "ZBZZ-GX-2026-0452",
+                     "co":  "郑伟",
+                     "ti":  "光大环保技术装备〔常州〕有限公司EB20260309-022、041、044、046、047-热电偶询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019eb47e90af1654",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "18852860415",
+                     "bu":  "光大环保技术装备〔常州〕有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3303",
+                     "co":  "吴卡娜",
+                     "ti":  "光大绿保固废处置（温岭）有限公司12个安全阀校验询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eba9e730d6ade",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "15888682478",
+                     "bu":  "光大绿保固废处置（温岭）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3301",
+                     "co":  "吴卡娜",
+                     "ti":  "光大绿保固废处置（温岭）有限公司电仪询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eba8d966668b0",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "15888682478",
+                     "bu":  "光大绿保固废处置（温岭）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7413",
+                     "co":  "刘红芳",
+                     "ti":  "光大环保能源（泗阳）有限公司2026年7月电仪备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eaf1881fc2468",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "13851377627",
+                     "bu":  "光大环保能源（泗阳）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7395",
+                     "co":  "王雅蕾",
+                     "ti":  "光大环保能源（沅江）有限公司2026年7月电仪备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb0878ac304ca",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "18684711820",
+                     "bu":  "光大环保能源（沅江）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-5602",
+                     "co":  "苏梦雨",
+                     "ti":  "青岛光大建发环保能源有限公司2026年化验室设备仪器校准技术服务询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019e8c7f63353755",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "13159262969",
+                     "bu":  "青岛光大建发环保能源有限公司"
+                 },
+                 {
+                     "pi":  "GDSW-GX-2026-2304",
+                     "co":  "王艳涛",
+                     "ti":  "滨州水务（博兴公司）地磅维修询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909aaa9e73325c019eb53eeb8d2ec5",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "18054357727",
+                     "bu":  "光大水务（滨州）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3232",
+                     "co":  "叶海波",
+                     "ti":  "光大绿色环保城乡再生能源（古田）有限公司2026年5月仪控、电气备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab19e73313c019eab2535470d63",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "15059328900",
+                     "bu":  "光大绿色环保城乡再生能源（古田）有限公司"
+                 },
+                 {
+                     "pi":  "LSHB-GX-2026-3229",
+                     "co":  "叶海波",
+                     "ti":  "光大绿色环保城乡再生能源（古田）有限公司安全阀在线校验服务询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eaafdbd7e2779",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "15059328900",
+                     "bu":  "光大绿色环保城乡再生能源（古田）有限公司"
+                 },
+                 {
+                     "pi":  "GDSW-GX-2026-2301",
+                     "co":  "刘玉",
+                     "ti":  "光大水务（济南章丘）有限公司软启动器采购询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb4429fe60206",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "15275150085",
+                     "bu":  "光大水务（济南章丘）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7339",
+                     "co":  "刘明",
+                     "ti":  "光大环保能源（顺化）有限公司2026年第二季度电气、仪控专业备品备件询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab39e732f99019ea61e16940194",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "0822886807",
+                     "bu":  "光大环保能源（顺化）有限公司"
+                 },
+                 {
+                     "pi":  "HBNYGC-GZ-2026-0638",
+                     "co":  "郭智仁",
+                     "ti":  "光大环保能源（济南）有限公司3、4号引风机高压变频器采购招标公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab59e7331bc019eb090b2d55acb",
+                     "pt":  "2026-06-12",
+                     "dl":  "",
+                     "ph":  "0755-83119951",
+                     "bu":  "光采招标（深圳）有限公司"
+                 },
+                 {
+                     "pi":  "HBNY-GX-2026-7423",
+                     "co":  "赵亚峰",
+                     "ti":  "光大环保能源（新蔡）有限公司变频器维修服务询价公告",
+                     "pf":  "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById\u0026id=2c909ab09e7330b1019eb062ed506732",
+                     "pt":  "2026-06-11",
+                     "dl":  "",
+                     "ph":  "18563222966",
+                     "bu":  "光大环保能源（新蔡）有限公司"
+                 }
+             ],
+    "mc":  78,
+    "nc":  131,
+    "total":  240,
+    "date":  "2026-06-15",
+    "cc":  31
+};var KWL=["热电偶","热电阻","温度计","双金属","温度变送器","压力表","压力变送器","差压变送器","压力开关","流量计","电磁流量计","涡街流量计","超声波流量计","液位计","液位变送器","磁翻板","雷达液位计","数显仪表","调节仪","显示仪","变送器","传感器","执行机构","电动执行器","调节阀","气动执行器","CEMS","烟气","气体检测","气体分析","分析仪","气体报警仪","氨逃逸","DCS","PLC","模块","控制器","PLC控制","DCS控制","可编程","卡件","安全阀","截止阀","球阀","蝶阀","闸阀","电磁阀","止回阀","减压阀","电仪","仪控","仪表","仪器","自动化","控制电缆","补偿导线","屏蔽电缆","开关柜","配电箱","变频器","软启动","称重","汽车衡","电子秤","PH计","溶解氧","浊度","水质分析","在线分析","检定","校验","校准"];var LOADED={};var curDate='';var aT='';function mJ(it){var t=(it.ti+' '+(it.bu||'')).toLowerCase();for(var i=0;i<KWL.length;i++)if(t.indexOf(KWL[i].toLowerCase())>=0)return true;return false}function mT(it){var r=[],t=it.ti+' '+(it.bu||'');for(var i=0;i<KWL.length;i++)if(t.indexOf(KWL[i])>=0){r.push(KWL[i]);if(r.length>=4)break}return r}function render(date){curDate=date;var data=LOADED[date];if(!data){document.getElementById('content').innerHTML='<div class="no-data">暂无数据</div>';return}var ai=[];if(data.core)data.core.forEach(function(it){it._type='core';ai.push(it)});if(data.maybe)data.maybe.forEach(function(it){it._type='maybe';ai.push(it)});var jc=ai.filter(function(it){return mJ(it)}).length;document.getElementById('summaryLine').innerHTML='<strong>报告日期：'+data.date+'</strong> 共 '+data.total+' 条公告 | ✅ 推荐 '+data.cc+' | ⚠️ 核实 '+data.mc;document.getElementById('summaryStats').innerHTML='<span class="stat green">🏆 金湖适配 '+jc+' 项</span><span class="stat blue">📋 推荐投标 '+data.cc+' 项</span><span class="stat yellow">⚠️ 需核实 '+data.mc+' 项</span><span class="stat gray">❌ 不相关 '+data.nc+' 项</span>';var counts={};ai.forEach(function(it){mT(it).forEach(function(t){counts[t]=(counts[t]||0)+1})});var sorted=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]}),bar=document.getElementById('tagBar');bar.innerHTML='<span class="tag active" data-tag="" onclick="tT(this)">🏷️ 全部</span>';sorted.slice(0,18).forEach(function(k){bar.innerHTML+='<span class="tag" data-tag="'+k+'" onclick="tT(this)">'+k+' ('+counts[k]+')</span>'});window.__ai=ai;window.__data=data;filter()}function tT(el){var tag=el.getAttribute('data-tag');if(aT===tag){aT='';document.querySelectorAll('.tag').forEach(function(t){t.className='tag'});document.querySelector('.tag[data-tag=""]').className='tag active'}else{aT=tag;document.querySelectorAll('.tag').forEach(function(t){t.className='tag'});el.className='tag active'}filter()}function filter(){var q=document.getElementById('searchInput').value.trim().toLowerCase(),tf=document.getElementById('typeFilter').value,ai=window.__ai;if(!ai)return;var fl=ai.filter(function(it){if(tf==='core'&&it._type!=='core')return false;if(tf==='maybe'&&it._type!=='maybe')return false;if(tf==='high'&&!mJ(it))return false;if(aT&&mT(it).indexOf(aT)===-1)return false;if(q&&(it.ti+' '+it.bu+' '+(it.pi||'')).toLowerCase().indexOf(q)===-1)return false;return true});document.getElementById('resultCount').textContent='共 '+fl.length+' 项';var co=fl.filter(function(it){return it._type==='core'}),mb=fl.filter(function(it){return it._type==='maybe'}),h='';if(co.length>0){h+='<div class="section"><h2 class="green-hdr">✅ 推荐投标 ('+co.length+'项)</h2>';co.forEach(function(it){h+=rI(it)});h+='</div>'}if(mb.length>0){h+='<div class="section"><h2 class="yellow-hdr">⚠️ 需核实 ('+mb.length+'项)</h2>';mb.forEach(function(it){h+=rI(it)});h+='</div>'}document.getElementById('content').innerHTML=h||'<div class="no-data">没有匹配的项目</div>'}function rI(it){var info='🏢 '+(it.bu||'')+(it.co?' · 👤 '+it.co:'')+(it.ph?' · 📞 '+it.ph:'')+(it.pt?' · 📅 '+it.pt:'')+(it.dl?' · ⏰ 截止：'+it.dl:'');var tags=mT(it),th='';if(tags.length>0||mJ(it)){th='<div class="tags">';if(mJ(it))th+='<span class="tag-jh">🏆 金湖适配</span>';tags.forEach(function(t){th+='<span class="tag-type">'+t+'</span>'});th+='</div>'}var pl='';if(it.pf){pl=' · <a href="https://raw.githubusercontent.com/qingye111111-arch/jh-yb-report/main/附件/'+it.pf+'" target="_blank" style="color:#2980b9;text-decoration:none;font-size:12px;background:#e8f0fe;padding:2px 6px;border-radius:3px">📎 PDF</a>'}return '<div class="item"><div><span class="pid">['+(it.pi||'')+']</span> <span class="tit">'+it.ti+'</span></div><div class="detail">'+info+pl+'</div>'+th+'</div>'}function switchDate(){render(document.getElementById('dateSelect').value)}function init(){LOADED[DATA.date]=DATA;render(DATA.date);var sel=document.getElementById('dateSelect'),today=new Date();for(var d=0;d<14;d++){var dt=new Date(today);dt.setDate(dt.getDate()-d);var ds=dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);if(LOADED[ds]){var o=document.createElement('option');o.value=ds;o.textContent=d===0?ds+' (今日)':d===1?ds+' (昨日)':ds;sel.appendChild(o)}}sel.value=DATA.date}init();</script></body></html>
+
 
 
 
