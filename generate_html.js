@@ -1,5 +1,6 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
+const stripBOM = s => s.charCodeAt(0) === 0xFEFF ? s.slice(1) : s;
 const dir = __dirname;
 
 // Find latest data file
@@ -10,7 +11,7 @@ const latestFile = files[files.length - 1];
 const jsonData = fs.readFileSync(path.join(dir, latestFile), "utf-8");
 const template = fs.readFileSync(path.join(dir, "template.html"), "utf-8");
 
-// Replace marker with JSON data
-const html = template.replace("//__DATA__", jsonData.trim());
+// Replace marker with JSON data (strip BOM from data)
+const html = template.replace("//__DATA__", stripBOM(jsonData).trim());
 fs.writeFileSync(path.join(dir, "index.html"), html, "utf-8");
 console.log("HTML generated: " + latestFile);
