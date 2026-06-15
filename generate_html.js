@@ -1,4 +1,4 @@
-var fs = require("fs");
+﻿var fs = require("fs");
 var path = require("path");
 var dir = "C:\\Users\\Administrator\\Desktop\\光大\\光大环境投标报告";
 var files = fs.readdirSync(dir).filter(x => x.startsWith("data_") && x.endsWith(".json")).sort();
