@@ -23,7 +23,10 @@
 <div class="container"><div class="summary-card"><div class="summary" id="summaryLine">加载中...</div><div class="summary-stats" id="summaryStats"></div></div>
 <div class="date-bar">📅 按日期筛选：<select id="dateSelect" onchange="switchDate()"></select></div>
 <div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 搜索项目" oninput="filter()"><select id="typeFilter" onchange="filter()"><option value="all" selected>📋 全部可投</option><option value="core">✅ 推荐投标</option><option value="maybe">⚠️ 需核实</option><option value="no">❌ 其他</option></select><span style="font-size:11px;color:#999" id="resultCount"></span></div>
-<div style="background:#fff;border-radius:8px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center"><a href="javascript:void(0)" id="refreshBtn" onclick="doRefresh()" style="display:inline-block;background:#1a5276;color:#fff;text-decoration:none;padding:10px 30px;border-radius:6px;font-size:14px;font-weight:bold">⟳ 一键刷新数据</a>
+<div style="background:#fff;border-radius:8px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center"><a id="refreshBtn" onclick="doRefresh()" style="cursor:pointer;display:inline-block;background:#1a5276;color:#fff;text-decoration:none;padding:10px 30px;border-radius:6px;font-size:14px;font-weight:bold">⟳ 一键刷新数据</a>
+<script>
+function doRefresh(){var b=document.getElementById("refreshBtn");b.textContent="⏳ 刷新中...";b.style.opacity="0.6";b.style.pointerEvents="none";var x=new XMLHttpRequest();x.open("GET","/refresh?t="+Date.now(),true);x.onreadystatechange=function(){if(x.readyState==4){if(x.status==200){setTimeout(function(){b.textContent="⟳ 一键刷新数据";b.style.opacity="1";b.style.pointerEvents="";alert("刷新已启动，请等1-3分钟后刷新页面")},1000)}else{b.textContent="⟳ 一键刷新数据";b.style.opacity="1";b.style.pointerEvents="";window.location.href="/refresh?t="+Date.now()}}};x.send()}
+</script>
 <script>
 function doRefresh(){var b=document.getElementById("refreshBtn");var t=b.textContent;b.textContent="⏳ 刷新中...";b.style.opacity="0.6";b.style.pointerEvents="none";fetch("/refresh").then(function(){setTimeout(function(){b.textContent="⟳ 一键刷新数据";b.style.opacity="1";b.style.pointerEvents="";alert("刷新已经启动，数据采集需要1-3分钟")},1500)}).catch(function(){b.textContent="⟳ 一键刷新数据";b.style.opacity="1";b.style.pointerEvents="";alert("启动失败，请重试")})}
 </script><div style="font-size:11px;color:#999;margin-top:5px">每天凌晨 0 点自动更新</div></div>
@@ -58,3 +61,4 @@ function copyPID(p){navigator.clipboard.writeText(p).catch(function(){prompt('�
 function init(){LOADED[DATA.date]=DATA;render();var sel=document.getElementById('dateSelect');sel.innerHTML='<option value="all">📅 全部日期</option>';var dt=[];if(DATA.core)DATA.core.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});if(DATA.maybe)DATA.maybe.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});dt.sort().reverse();dt.forEach(function(d){var o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});sel.value=DATA.date;sd=DATA.date;filter()}
 init();
 </script></body></html>
+

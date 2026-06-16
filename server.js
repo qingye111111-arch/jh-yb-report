@@ -42,9 +42,10 @@ const srv = http.createServer((req, res) => {
     ps.stdout.pipe(logStream);
     ps.stderr.pipe(logStream);
     ps.unref();
+    ps.on("error", function(e) { fs.appendFileSync(path.join(ROOT, "refresh.log"), "SPAWN ERROR: " + e.message + "`n"); });
 
     // Return simple page immediately
-    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache, no-store, must-revalidate" });
     res.write("<!DOCTYPE html><html><head><meta charset='utf-8'>");
     res.write("<title>\u5237\u65b0\u4e2d</title>");
     res.write("<style>body{font-family:sans-serif;text-align:center;padding:60px 20px;background:#f0f2f5}h2{color:#1a5276}.spinner{border:4px solid #e0e0e0;border-top:4px solid #1a5276;border-radius:50%;width:40px;height:40px;margin:20px auto;animation:spin 1s linear infinite}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>");
@@ -97,3 +98,4 @@ srv.listen(PORT, "0.0.0.0", function() {
   console.log("  (\u624b\u673a\u9700\u8fde\u540c\u4e00\u4e2aWiFi)");
   console.log("");
 });
+
