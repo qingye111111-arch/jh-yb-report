@@ -1,4 +1,4 @@
-﻿﻿param([string]$OutputDir = "D:\光大环境投标报告")
+﻿param([string]$OutputDir = "D:\光大环境投标报告")
 . .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
 $script:today = (Get-Date).ToString("yyyy-MM-dd")
@@ -27,28 +27,11 @@ $core_kw = @(
 $maybe_kw = @("备品备件","备件","阀类","阀门","密封件","管件","法兰","紧固件","滤芯","密封垫","机务备件","水处理备件","加工件","管材","钢材","五金","电气","电动头","执行器","气动头","定位器","阀门配件","密封垫片")
 function Test-Instrument($title){foreach($kw in $core_kw){if($title.IndexOf($kw)-ge 0){return "core"}}foreach($kw in $maybe_kw){if($title.IndexOf($kw)-ge 0){return "maybe"}}return "no"}
 
-# Custom WebClient with timeout support
-Add-Type -Language CSharp -ReferencedAssemblies System.Net @"
-using System.Net;
-public class TimeoutWebClient : WebClient {
-    public int RequestTimeout { get; set; }
-    protected override WebRequest GetWebRequest(Uri address) {
-        var request = base.GetWebRequest(address);
-        request.Timeout = RequestTimeout;
-        return request;
-    }
-}
-"@
-
-# Add timeout in seconds parameter
 function Safe-Download($url,[int]$retries=3){
     for($i=0;$i-lt$retries;$i++){
         try{
-            [TimeoutWebClient]$wc = New-Object TimeoutWebClient
-            $wc.RequestTimeout = 20000
-            $wc.Encoding=[System.Text.Encoding]::UTF8
-            $wc.Headers.Add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-            return [System.Text.Encoding]::UTF8.GetString($wc.DownloadData($url))
+            $response = Invoke-WebRequest -Uri $url -TimeoutSec 20 -UseBasicParsing -Headers @{"User-Agent"="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+            return $response.Content
         }catch{
             if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $null}
         }
@@ -57,10 +40,7 @@ function Safe-Download($url,[int]$retries=3){
 function Safe-DownloadFile($url,$path,[int]$retries=3){
     for($i=0;$i-lt$retries;$i++){
         try{
-            [TimeoutWebClient]$wc = New-Object TimeoutWebClient
-            $wc.RequestTimeout = 30000
-            $wc.Headers.Add("User-Agent","Mozilla/5.0")
-            $wc.DownloadFile($url,$path)
+            Invoke-WebRequest -Uri $url -TimeoutSec 30 -OutFile $path -UseBasicParsing -Headers @{"User-Agent"="Mozilla/5.0"}
             return $true
         }catch{
             if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $false}
@@ -93,6 +73,8 @@ Write-Host "JSON 已保存"
 # 生成带数据嵌入的 HTML 报告页面
 & "node" "generate_html.js" 2>&1 | Out-Null
 Write-Host "✅ HTML 报告已生成"
+# 立即删除锁标记（即使后续 Git 推送卡住也不影响页面刷新）
+Remove-Item (Join-Path $OutputDir "refresh.lock") -ErrorAction SilentlyContinue
 
 # --- 推送到 GitHub Pages ---
 Write-Host "正在推送到 GitHub..."
