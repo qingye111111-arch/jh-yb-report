@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>光大投标管家</title>
+﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>光大投标管家</title>
 <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Microsoft YaHei","Segoe UI",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
 .top{background:linear-gradient(135deg,#1a5276,#2980b9);color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}.top h1{font-size:18px;font-weight:600}.top .sub{font-size:12px;opacity:.8}
 .container{max-width:1100px;margin:0 auto;padding:16px}
@@ -23,7 +23,10 @@
 <div class="container"><div class="summary-card"><div class="summary" id="summaryLine">加载中...</div><div class="summary-stats" id="summaryStats"></div></div>
 <div class="date-bar">📅 按日期筛选：<select id="dateSelect" onchange="switchDate()"></select></div>
 <div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 搜索项目" oninput="filter()"><select id="typeFilter" onchange="filter()"><option value="all" selected>📋 全部可投</option><option value="core">✅ 推荐投标</option><option value="maybe">⚠️ 需核实</option><option value="no">❌ 其他</option></select><span style="font-size:11px;color:#999" id="resultCount"></span></div>
-<div style="background:#fff;border-radius:8px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center"><a href="/refresh" id="refreshBtn" style="display:inline-block;background:#1a5276;color:#fff;text-decoration:none;padding:10px 30px;border-radius:6px;font-size:14px;font-weight:bold">⟳ 一键刷新数据</a><div style="font-size:11px;color:#999;margin-top:5px">每天凌晨 0 点自动更新</div></div>
+<div style="background:#fff;border-radius:8px;padding:10px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center"><a href="javascript:void(0)" id="refreshBtn" onclick="doRefresh()" style="display:inline-block;background:#1a5276;color:#fff;text-decoration:none;padding:10px 30px;border-radius:6px;font-size:14px;font-weight:bold">⟳ 一键刷新数据</a>
+<script>
+function doRefresh(){var b=document.getElementById("refreshBtn");var t=b.textContent;b.textContent="⏳ 刷新中...";b.style.opacity="0.6";b.style.pointerEvents="none";fetch("/refresh").then(function(){setTimeout(function(){b.textContent="⟳ 一键刷新数据";b.style.opacity="1";b.style.pointerEvents="";alert("刷新已经启动，数据采集需要1-3分钟")},1500)}).catch(function(){b.textContent="⟳ 一键刷新数据";b.style.opacity="1";b.style.pointerEvents="";alert("启动失败，请重试")})}
+</script><div style="font-size:11px;color:#999;margin-top:5px">每天凌晨 0 点自动更新</div></div>
 <div class="tag-bar" id="tagBar"></div><div class="content-area" id="content"><div class="loading">加载中...</div></div></div>
 <div class="footer">光大环境投标筛选工具</div>
 <script>
@@ -363,7 +366,7 @@ var DATA={
     "total":  240,
     "nc":  168,
     "mc":  33,
-    "time":  "2026-06-16 21:45",
+    "time":  "2026-06-16 21:46",
     "date":  "2026-06-16",
     "core":  [
                  {
