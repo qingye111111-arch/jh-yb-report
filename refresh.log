@@ -276,4 +276,22 @@ git : fatal: unable to access 'https://github.com/qingye111111-arch/jh-yb-report
   第30页: 8条
 共 240 条公告
 [推荐投标] 39  [需核实] 33  [不相关] 168
-  [1/39] HBNY-GX-2026-7590  [2/39] HBNY-GX-2026-7696  [3/39] HBNY-GX-2026-7521  [4/39] LSHB-GX-2026-3209  [5/39] LSHB-GX-2026-3285  [6/39] HBNYGC-GZ-2026-0738  [7/39] HBNY-GX-2026-7583  [8/39] HBNY-GX-2026-7504  [9/39] HBNY-GX-2026-7249  [10/39] HBNY-GX-2026-7509  [11/39] HBNY-GX-2026-7511  [12/39] HBNY-GX-2026-7455  [13/39] HBNYGC-GZ-2026-0740  [14/39] LSHB-GX-2026-3309  [15/39] HBNY-GX-2026-7420  [16/39] HBNY-GX-2026-7502  [17/39] GDSW-GX-2026-1831  [18/39] HBNY-GX-2026-7477  [19/39] HBNY-GX-2026-7505  [20/39] HBNY-GX-2026-7492  [21/39] HBNY-GX-2026-7518  [22/39] HBNY-GX-2026-7503  [23/39] GDSW-GX-2026-2260  [24/39] HBNY-GX-2026-7538  [25/39] HBNY-GX-2026-7485  [26/39] HBNY-GX-2026-7390  [27/39] HBNY-GX-2026-7526  [28/39] LSHB-GX-2026-3270  [29/39] ZBZZ-GX-2026-0459  [30/39] GDSWGC-GZ-2026-0143  [31/39] LSHB-GX-2026-3260  [32/39] HBNYGC-GZ-2026-0732  [33/39] LSHB-GX-2026-3306  [34/39] ZBZZ-GX-2026-0452  [35/39] LSHB-GX-2026-3303  [36/39] LSHB-GX-2026-3301  [37/39] GDSW-GX-2026-2296  [38/39] HBNY-GX-2026-7413  [39/39] HBNY-GX-2026-7395
+  [1/39] HBNY-GX-2026-7590  [2/39] HBNY-GX-2026-7696  [3/39] HBNY-GX-2026-7521  [4/39] LSHB-GX-2026-3209  [5/39] LSHB-GX-2026-3285  [6/39] HBNYGC-GZ-2026-0738  [7/39] HBNY-GX-2026-7583  [8/39] HBNY-GX-2026-7504  [9/39] HBNY-GX-2026-7249  [10/39] HBNY-GX-2026-7509  [11/39] HBNY-GX-2026-7511  [12/39] HBNY-GX-2026-7455  [13/39] HBNYGC-GZ-2026-0740  [14/39] LSHB-GX-2026-3309  [15/39] HBNY-GX-2026-7420  [16/39] HBNY-GX-2026-7502  [17/39] GDSW-GX-2026-1831  [18/39] HBNY-GX-2026-7477  [19/39] HBNY-GX-2026-7505  [20/39] HBNY-GX-2026-7492  [21/39] HBNY-GX-2026-7518  [22/39] HBNY-GX-2026-7503  [23/39] GDSW-GX-2026-2260  [24/39] HBNY-GX-2026-7538  [25/39] HBNY-GX-2026-7485  [26/39] HBNY-GX-2026-7390  [27/39] HBNY-GX-2026-7526  [28/39] LSHB-GX-2026-3270  [29/39] ZBZZ-GX-2026-0459  [30/39] GDSWGC-GZ-2026-0143  [31/39] LSHB-GX-2026-3260  [32/39] HBNYGC-GZ-2026-0732  [33/39] LSHB-GX-2026-3306  [34/39] ZBZZ-GX-2026-0452  [35/39] LSHB-GX-2026-3303  [36/39] LSHB-GX-2026-3301  [37/39] GDSW-GX-2026-2296  [38/39] HBNY-GX-2026-7413  [39/39] HBNY-GX-2026-7395JSON 已保存
+? HTML 报告已生成
+正在推送到 GitHub...
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'refresh.log', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'server.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'template.html', LF will be replaced by CRLF the next time Git touches it
+[main 8aff6de] 姣忔棩鏇存柊 2026-06-16
+ 5 files changed, 103 insertions(+), 6 deletions(-)
+git : fatal: unable to access 'https://github.com/qingye111111-arch/jh-yb-report.git/': Failed to connect to github.com
+ port 443 after 21081 ms: Could not connect to server
+所在位置 D:\光大环境投标报告\check_ebid.ps1:86 字符: 1
++ git push origin main 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+? GitHub Pages 已更新
+微信推送成功
