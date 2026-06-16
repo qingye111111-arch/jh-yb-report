@@ -1,7 +1,7 @@
-﻿﻿﻿param([string]$OutputDir = "D:\光大环境投标报告")
+﻿﻿param([string]$OutputDir = "D:\光大环境投标报告")
 . .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
-$script:today = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
+$script:today = (Get-Date).ToString("yyyy-MM-dd")
 $pdfDir = Join-Path $OutputDir "附件"
 if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
 if (-not (Test-Path $pdfDir)) { New-Item -ItemType Directory -Path $pdfDir -Force | Out-Null }
@@ -26,16 +26,55 @@ $core_kw = @(
 )
 $maybe_kw = @("备品备件","备件","阀类","阀门","密封件","管件","法兰","紧固件","滤芯","密封垫","机务备件","水处理备件","加工件","管材","钢材","五金","电气","电动头","执行器","气动头","定位器","阀门配件","密封垫片")
 function Test-Instrument($title){foreach($kw in $core_kw){if($title.IndexOf($kw)-ge 0){return "core"}}foreach($kw in $maybe_kw){if($title.IndexOf($kw)-ge 0){return "maybe"}}return "no"}
-function Safe-Download($url,[int]$retries=3){for($i=0;$i-lt$retries;$i++){try{$wc=New-Object System.Net.WebClient;$wc.Encoding=[System.Text.Encoding]::UTF8;$wc.Headers.Add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");return [System.Text.Encoding]::UTF8.GetString($wc.DownloadData($url))}catch{if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $null}}}}
-function Safe-DownloadFile($url,$path,[int]$retries=3){for($i=0;$i-lt$retries;$i++){try{$wc=New-Object System.Net.WebClient;$wc.Headers.Add("User-Agent","Mozilla/5.0");$wc.DownloadFile($url,$path);return $true}catch{if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $false}}}}
+
+# Custom WebClient with timeout support
+Add-Type -Language CSharp -ReferencedAssemblies System.Net @"
+using System.Net;
+public class TimeoutWebClient : WebClient {
+    public int RequestTimeout { get; set; }
+    protected override WebRequest GetWebRequest(Uri address) {
+        var request = base.GetWebRequest(address);
+        request.Timeout = RequestTimeout;
+        return request;
+    }
+}
+"@
+
+# Add timeout in seconds parameter
+function Safe-Download($url,[int]$retries=3){
+    for($i=0;$i-lt$retries;$i++){
+        try{
+            [TimeoutWebClient]$wc = New-Object TimeoutWebClient
+            $wc.RequestTimeout = 20000
+            $wc.Encoding=[System.Text.Encoding]::UTF8
+            $wc.Headers.Add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+            return [System.Text.Encoding]::UTF8.GetString($wc.DownloadData($url))
+        }catch{
+            if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $null}
+        }
+    }
+}
+function Safe-DownloadFile($url,$path,[int]$retries=3){
+    for($i=0;$i-lt$retries;$i++){
+        try{
+            [TimeoutWebClient]$wc = New-Object TimeoutWebClient
+            $wc.RequestTimeout = 30000
+            $wc.Headers.Add("User-Agent","Mozilla/5.0")
+            $wc.DownloadFile($url,$path)
+            return $true
+        }catch{
+            if($i-lt$retries-1){Start-Sleep -Milliseconds 2000}else{return $false}
+        }
+    }
+}
 function Get-Items{$all=@();for($p=1;$p-le30;$p++){$html=Safe-Download("https://zcpt.cebenvironment.com.cn/cms/category/iframe.html?dates=300&categoryId=2&tabName=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A&page="+$p);if([string]::IsNullOrEmpty($html)){break};$m=[regex]::Matches($html,'<a href="(https://zcpt\.cebenvironment\.com\.cn/ebi_bulletin/[^"]+)"\s+title="([^"]+)"[^>]*>');if($m.Count-eq0){break};foreach($x in $m){$u=$x.Groups[1].Value;$pt="";$z2=[regex]::Match($u,"/ebi_bulletin/(\d{4}-\d{2}-\d{2})/");if($z2.Success){$pt=$z2.Groups[1].Value};$all+=@{url=$u;title=$x.Groups[2].Value;pt=$pt}};Write-Host("  第"+$p+"页: "+$m.Count+"条");Start-Sleep -Milliseconds 500};return $all}
-function Get-Detail($url){$html=Safe-Download $url;if([string]::IsNullOrEmpty($html)){return @{p="";b="";c="";ph="";f="";dl=""}};$o=[System.Text.RegularExpressions.RegexOptions]::Singleline;$r=@{p="";b="";c="";ph="";f="";dl=""};$z=[regex]::Match($html,'\[([A-Za-z0-9-]+)\]',$o);if($z.Success){$r.p=$z.Groups[1].Value};$lb=@("招标人","联系人","联系电话");$fk=@("b","c","ph");for($i=0;$i-lt3;$i++){$pt='<th>'+$lb[$i]+'</th>(?:\s*)<td[^>]*>([^<]+)</td>';$z=[regex]::Match($html,$pt,$o);if($z.Success){$r[$fk[$i]]=$z.Groups[1].Value.Trim()}};$z=[regex]::Match($html,'openFileById%26id%3D([a-f0-9]+)',$o);if($z.Success){$r.f=$z.Groups[1].Value};$tz=[regex]::Match($html,'报价截止|截止时间|报价截止时间|投标截止',$o);if($tz.Success){$ctx=$html.Substring([Math]::Max(0,$tz.Index-30),[Math]::Min(180,$html.Length-[Math]::Max(0,$tz.Index-30)));$dz=[regex]::Match($ctx,'(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})');if($dz.Success){$r.dl=$dz.Groups[1].Value.Trim()}}  # 提取发布时间
+function Get-Detail($url){$html=Safe-Download $url;if([string]::IsNullOrEmpty($html)){return @{p="";b="";c="";ph="";f="";dl=""}};$o=[System.Text.RegularExpressions.RegexOptions]::Singleline;$r=@{p="";b="";c="";ph="";f="";dl=""};$z=[regex]::Match($html,'\[([A-Za-z0-9-]+)\]',$o);if($z.Success){$r.p=$z.Groups[1].Value};$lb=@("招标人","联系人","联系电话");$fk=@("b","c","ph");for($i=0;$i-lt3;$i++){$pt='<th>'+$lb[$i]+'</th>(?:\s*)<td[^>]*>([^<]+)</td>';$z=[regex]::Match($html,$pt,$o);if($z.Success){$r[$fk[$i]]=$z.Groups[1].Value.Trim()}};$z=[regex]::Match($html,'openFileById%26id%3D([a-f0-9]+)',$o);if($z.Success){$r.f=$z.Groups[1].Value};$tz=[regex]::Match($html,'报价截止|截止时间|报价截止时间|投标截止',$o);if($tz.Success){$ctx=$html.Substring([Math]::Max(0,$tz.Index-30),[Math]::Min(180,$html.Length-[Math]::Max(0,$tz.Index-30)));$dz=[regex]::Match($ctx,'(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})');if($dz.Success){$r.dl=$dz.Groups[1].Value.Trim()}}
   $pz = [regex]::Match($html,'发布[日期时间]+[：:]\s*(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})',$o)
   if (-not $pz.Success) { $pz = [regex]::Match($html,'公告日期[：:]\s*(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})',$o) }
   if (-not $pz.Success) { $pz = [regex]::Match($html,'(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})',$o) }
   if ($pz.Success) { $r.pt = $pz.Groups[1].Value.Trim() }
   return $r}
-function DnPdf($id,$proj,$title){if([string]::IsNullOrEmpty($id)){return $null};$sn=$title;if($sn.Length-gt40){$sn=$sn.Substring(0,40)};$sn=$sn-replace'[<>:"/\\|?*]','';$fn=$proj+"_"+$sn+".pdf";$fp=Join-Path $pdfDir $fn;if(Test-Path $fp){return $fn};if(Safe-DownloadFile "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id=$id" $fp){Write-Host "    ↓ PDF: $fn";return $fn};return $null}
+function DnPdf($id,$proj,$title){if([string]::IsNullOrEmpty($id)){return $null};$sn=$title;if($sn.Length-gt40){$sn=$sn.Substring(0,40)};$sn=$sn-replace'[<>:"/\\|?*]','';$fn=$proj+"_"+$sn+".pdf";$fp=Join-Path $pdfDir $fn;if(Test-Path $fp){return $fn};if(Safe-DownloadFile "https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id=$id" $fp){Write-Host("    ↓ PDF: $fn");return $fn};return $null}
 Write-Host "正在获取公告列表..."
 $all=Get-Items
 Write-Host ("共 "+$all.Count+" 条公告")
@@ -91,3 +130,6 @@ if (Test-Path $jsonFile) {
         else { Write-Host "推送失败" }
     } catch { Write-Host "推送出错" }
 }
+
+# 删除刷新锁标记
+Remove-Item (Join-Path $OutputDir "refresh.lock") -ErrorAction SilentlyContinue
