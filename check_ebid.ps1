@@ -1,4 +1,4 @@
-﻿param([string]$OutputDir = "D:\光大环境投标报告")
+﻿param([string]$OutputDir = "D:\光大环境投标报告", [switch]$SkipPush)
 . .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
 $script:today = (Get-Date).ToString("yyyy-MM-dd")
@@ -76,7 +76,7 @@ Write-Host "✅ HTML 报告已生成"
 # 立即删除锁标记（即使后续 Git 推送卡住也不影响页面刷新）
 Remove-Item (Join-Path $OutputDir "refresh.lock") -ErrorAction SilentlyContinue
 
-# --- 推送到 GitHub Pages ---
+if (-not $SkipPush) { # --- 推送到 GitHub Pages ---
 Write-Host "正在推送到 GitHub..."
 $remoteUrl = "https://${gitHubUser}:${gitHubToken}@github.com/${gitHubUser}/${gitHubRepo}.git"
 git remote add origin $remoteUrl 2>$null
@@ -86,7 +86,7 @@ git commit -m "每日更新 $script:today" --allow-empty 2>$null
 git push origin main 2>&1
 Write-Host "✅ GitHub Pages 已更新"
 
-# --- 微信推送（仅链接）---
+} if (-not $SkipPush) { # --- 微信推送（仅链接）---
 $sendKey = $serverChanKey
 $jsonFile = Join-Path $OutputDir ("data_" + $script:today + ".json")
 if (Test-Path $jsonFile) {
@@ -114,4 +114,4 @@ if (Test-Path $jsonFile) {
 }
 
 # 删除刷新锁标记
-Remove-Item (Join-Path $OutputDir "refresh.lock") -ErrorAction SilentlyContinue
+} Remove-Item (Join-Path $OutputDir "refresh.lock") -ErrorAction SilentlyContinue

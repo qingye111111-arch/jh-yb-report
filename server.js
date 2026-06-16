@@ -30,7 +30,7 @@ const srv = http.createServer((req, res) => {
     // Spawn script (no waiting, no lock, no nothing)
     var ps = spawn("powershell.exe", [
       "-ExecutionPolicy", "Bypass",
-      "-File", path.join(ROOT, "check_ebid.ps1")
+      "-File", path.join(ROOT, "check_ebid.ps1"), "-SkipPush"
     ], {
       cwd: ROOT,
       
@@ -98,4 +98,5 @@ srv.listen(PORT, "0.0.0.0", function() {
   console.log("  (\u624b\u673a\u9700\u8fde\u540c\u4e00\u4e2aWiFi)");
   console.log("");
 });
+
 
