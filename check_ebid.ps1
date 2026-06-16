@@ -1,4 +1,4 @@
-﻿﻿param([string]$OutputDir = "D:\光大环境投标报告")
+﻿﻿﻿param([string]$OutputDir = "D:\光大环境投标报告")
 . .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
 $script:today = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
@@ -77,11 +77,11 @@ if (Test-Path $jsonFile) {
     if (-not $localIP) { $serverUrl = "http://localhost:8080" }
     
     $titleMsg = "光大投标 · 每日报告 " + $todayData.date
-    $contentMsg = "电脑访问：\n"
-    $contentMsg += "http://localhost:8080/\n\n"
-    $contentMsg += "手机访问（同WiFi）：\n"
-    $contentMsg += $serverUrl + "\n\n"
-    $contentMsg += "GitHub Pages：\n"
+    $contentMsg = "电脑访问：`n"
+    $contentMsg += "http://localhost:8080/`n`n"
+    $contentMsg += "手机访问（同WiFi）：`n"
+    $contentMsg += $serverUrl + "`n`n"
+    $contentMsg += "GitHub Pages：`n"
     $contentMsg += $githubPagesUrl
     
     try {

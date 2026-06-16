@@ -1,7 +1,7 @@
-const http = require("http");
+﻿const http = require("http");
 const fs = require("fs");
 const path = require("path");
-const { exec } = require("child_process");
+const { spawn } = require("child_process");
 const os = require("os");
 const url = require("url");
 
@@ -19,26 +19,39 @@ const srv = http.createServer((req, res) => {
   if (p === "/refresh") {
     res.writeHead(200, {"Content-Type":"text/html; charset=utf-8"});
     res.write("<html><head><meta charset='utf-8'><title>\u5237\u65b0\u4e2d</title>");
-    res.write("<meta http-equiv='refresh' content='120;url=/index.html'>");
+    res.write("<meta http-equiv='refresh' content='180;url=/index.html'>");
     res.write("<style>body{font-family:sans-serif;text-align:center;padding:40px}h2{color:#1a5276}.ok{color:green}.fail{color:red}</style>");
     res.write("</head><body><h2>\u{1F33E} \u5149\u5927\u6295\u6807\u7ba1\u5bb6</h2>");
     res.write("<p>\u6b63\u5728\u5237\u65b0\u6570\u636e\uff0c\u8bf7\u8010\u5fc3\u7b49\u5f85...</p><pre>");
 
-    exec('powershell -ExecutionPolicy Bypass -File "' + ROOT + '\\check_ebid.ps1"', {cwd:ROOT, timeout:180000}, (err, stdout, stderr) => {
-      res.write(stdout + "\n");
-      if (err) {
-        res.write("<span class='fail'>\u2716 \u5237\u65b0\u5931\u8d25</span>\n");
-        res.write(stderr + "\n");
-      } else {
-        exec('node "' + ROOT + '\\generate_html.js"', {cwd:ROOT}, (err2, so2, se2) => {
-          res.write(so2 + "\n");
-          if (!err2) res.write("<span class='ok'>\u2705 \u5237\u65b0\u5b8c\u6210\uff01</span>\n");
-          else res.write("<span class='fail'>HTML\u751f\u6210\u5931\u8d25</span>\n");
-          res.write("</pre><p><a href='/index.html'>\u8fd4\u56de\u9996\u9875</a></p></body></html>");
-          res.end();
-        });
-      }
-      if (err) { res.write("</pre><p><a href='/index.html'>\u8fd4\u56de\u9996\u9875</a></p></body></html>"); res.end(); }
+    // spawn instead of exec: avoids cmd.exe code-page mangling of Chinese path
+    var psScript = path.join(ROOT, 'check_ebid.ps1');
+    var ps = spawn('powershell.exe', ['-ExecutionPolicy', 'Bypass', '-File', psScript], { cwd: ROOT });
+    var psTimer = setTimeout(function() { try { ps.kill(); } catch(e) {} }, 180000);
+    ps.stdout.on('data', function(data) { res.write(data.toString()); });
+    ps.stderr.on('data', function(data) { res.write(data.toString()); });
+    ps.on('close', function(code) {
+      clearTimeout(psTimer);
+      res.write("\n\u2716 \u8fdb\u7a0b\u9000\u51fa\u7801: " + code + "\n");
+      var nodeScript = path.join(ROOT, 'generate_html.js');
+      var nd = spawn('node.exe', [nodeScript], { cwd: ROOT });
+      nd.stdout.on('data', function(data) { res.write(data.toString()); });
+      nd.stderr.on('data', function(data) { res.write(data.toString()); });
+      nd.on('close', function(code2) {
+        if (code2 === 0) {
+          res.write("<span class='ok'>\u2705 \u5237\u65b0\u5b8c\u6210\uff01</span>\n");
+        } else {
+          res.write("<span class='fail'>HTML\u751f\u6210\u5931\u8d25 (exit: " + code2 + ")</span>\n");
+        }
+        res.write("</pre><p><a href='/index.html'>\u8fd4\u56de\u9996\u9875</a></p></body></html>");
+        res.end();
+      });
+    });
+    ps.on('error', function(e) {
+      clearTimeout(psTimer);
+      res.write("<span class='fail'>\u2716 \u542f\u52a8\u5931\u8d25: " + e.message + "</span>\n");
+      res.write("</pre><p><a href='/index.html'>\u8fd4\u56de\u9996\u9875</a></p></body></html>");
+      res.end();
     });
     return;
   }
