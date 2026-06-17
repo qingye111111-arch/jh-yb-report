@@ -115,3 +115,4 @@ if (Test-Path $jsonFile) {
 
 # 删除刷新锁标记
 } Remove-Item (Join-Path $OutputDir "refresh.lock") -ErrorAction SilentlyContinue
+
