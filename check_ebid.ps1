@@ -64,7 +64,7 @@ Write-Host ("[推荐投标] $($c.Count)  [需核实] $($m.Count)  [不相关] $(
 $cd=@();$i=0
 foreach($x in $c){$i++;Write-Host("  [$i/$($c.Count)] ")-NoNewline;$d=Get-Detail $x.url;Write-Host $d.p -NoNewline;if($d.f){$pf=DnPdf $d.f $d.p $x.title}else{$pf=""};$cd+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt};Start-Sleep -Milliseconds 300}
 $md=@()
-foreach($x in $m){$d=Get-Detail $x.url;if($d.f){$pf="https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id="+$d.f}else{$pf=""};$md+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt}}
+foreach($x in $m){Start-Sleep -Milliseconds 150;$d=Get-Detail $x.url;if($d.f){$pf="https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id="+$d.f}else{$pf=""};$md+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt}}
 $nd=@();foreach($x in $n){$d=Get-Detail $x.url;$nd+=@{ti=$x.title;pt=$x.pt;pi=$d.p}}
 $json=@{date=$script:today;time=(Get-Date -Format "yyyy-MM-dd HH:mm");total=$all.Count;cc=$c.Count;mc=$m.Count;nc=$n.Count;core=$cd;maybe=$md;no=$nd}|ConvertTo-Json -Depth 3
 $json|Out-File (Join-Path $OutputDir ("data_"+$script:today+".json")) -Encoding UTF8
