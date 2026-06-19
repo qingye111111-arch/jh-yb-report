@@ -25,7 +25,7 @@ $core_kw = @(
   "发电机","发电机组","电动机","变压器","汽轮机","风机","水泵","压缩机","高低压柜","高低压开关柜","控制柜"
 )
 $maybe_kw = @("备品备件","备件","阀类","阀门","密封件","管件","法兰","紧固件","滤芯","密封垫","机务备件","水处理备件","加工件","管材","钢材","五金","电气","电动头","执行器","气动头","定位器","阀门配件","密封垫片")
-function Test-Instrument($title){$ekw=@("维修","检修","改造","安装","调试","维护","保养","更换");foreach($kw in $ekw){if($title.IndexOf($kw)-ge 0){return "no"}}foreach($kw in $core_kw){if($title.IndexOf($kw)-ge 0){return "core"}}foreach($kw in $maybe_kw){if($title.IndexOf($kw)-ge 0){return "maybe"}}return "no"}
+function Test-Instrument($title){$ekw=@("维修","检修");foreach($kw in $ekw){if($title.IndexOf($kw)-ge 0){return "no"}}foreach($kw in $core_kw){if($title.IndexOf($kw)-ge 0){return "core"}}foreach($kw in $maybe_kw){if($title.IndexOf($kw)-ge 0){return "maybe"}}return "no"}
 
 function Safe-Download($url,[int]$retries=3){
     for($i=0;$i-lt$retries;$i++){
@@ -62,7 +62,7 @@ $c=@();$m=@();$n=@()
 foreach($x in $all){switch(Test-Instrument $x.title){"core"{$c+=$x};"maybe"{$m+=$x};"no"{$n+=$x}}}
 Write-Host ("[推荐投标] $($c.Count)  [需核实] $($m.Count)  [不相关] $($n.Count)")
 $cd=@();$i=0
-foreach($x in $c){$i++;Write-Host("  [$i/$($c.Count)] ")-NoNewline;$d=Get-Detail $x.url;Write-Host $d.p -NoNewline;if($d.f){$pf=DnPdf $d.f $d.p $x.title}else{$pf=""};$cd+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt};Start-Sleep -Milliseconds 300}
+foreach($x in $c){$i++;Write-Host("  [$i/$($c.Count)] ")-NoNewline;$d=Get-Detail $x.url;Write-Host $d.p -NoNewline;if($d.f){$pf=DnPdf $d.f $d.p $x.title}else{$pf=""};$cd+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt};Start-Sleep -Milliseconds 1000}
 $md=@()
 foreach($x in $m){Start-Sleep -Milliseconds 150;$d=Get-Detail $x.url;if($d.f){$pf="https://zcpt.cebenvironment.com.cn/dzzb/cgUploadController.do?openFileById&id="+$d.f}else{$pf=""};$md+=@{ti=$x.title;pi=$d.p;bu=$d.b;co=$d.c;ph=$d.ph;pf=$pf;dl=$d.dl;pt=$x.pt}}
 $nd=@();foreach($x in $n){$d=Get-Detail $x.url;$nd+=@{ti=$x.title;pt=$x.pt;pi=$d.p}}
