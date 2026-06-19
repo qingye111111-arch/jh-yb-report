@@ -5,7 +5,7 @@ const { spawn } = require("child_process");
 const os = require("os");
 
 const PORT = 8080;
-const ROOT = "D:\\光大环境投标报告";
+const ROOT = "C:\\Users\\Administrator\\Desktop\\工作\\光大环境投标报告";
 
 function getIP() {
   var ifs = os.networkInterfaces();
