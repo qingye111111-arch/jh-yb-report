@@ -3,8 +3,8 @@ const path = require("path");
 const stripBOM = s => s.charCodeAt(0) === 0xFEFF ? s.slice(1) : s;
 const dir = __dirname;
 
-// Read ALL data files and merge (newest first)
-const files = fs.readdirSync(dir).filter(f => f.startsWith("data_") && f.endsWith(".json") && !f.includes("_merged")).sort().reverse();
+// Read ALL data files and merge
+const files = fs.readdirSync(dir).filter(f => f.startsWith("data_") && f.endsWith(".json") && !f.includes("_merged")).sort();
 if (files.length === 0) { console.log("No data files"); process.exit(0); }
 
 var allItems = {};
@@ -38,4 +38,4 @@ var json = JSON.stringify(merged, null, 4);
 var template = fs.readFileSync(path.join(dir, "template.html"), "utf-8");
 var html = template.replace("//__DATA__", json);
 fs.writeFileSync(path.join(dir, "index.html"), html, "utf-8");
-console.log("OK: merged " + files.length + " files, " + merged.total + " items, date=" + latestDate);
+console.log("OK: merged " + files.length + " files, " + merged.total + " items");
