@@ -1,4 +1,4 @@
-﻿param([string]$OutputDir = "D:\光大环境投标报告", [switch]$SkipPush)
+﻿﻿param([string]$OutputDir = "D:\光大环境投标报告", [switch]$SkipPush)
 . .\deploy_config.ps1
 $OutputDir = $OutputDir.TrimEnd('\')
 $script:today = (Get-Date).ToString("yyyy-MM-dd")
