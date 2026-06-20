@@ -13,7 +13,7 @@ files.forEach(function(f) {
         var raw = fs.readFileSync(path.join(dir, f), "utf-8");
         var clean = stripBOM(raw);
         var data = JSON.parse(clean);
-        if (!latestDate) latestDate = data.date || "";
+        latestDate = data.date || "";
         ["core","maybe","no"].forEach(function(cat) {
             (data[cat]||[]).forEach(function(item) {
                 var id = item.pi || item.ti;

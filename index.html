@@ -34,8 +34,8 @@ function doRefresh(){var b=document.getElementById("refreshBtn");var t=b.textCon
 <div class="footer">光大环境投标筛选工具</div>
 <script>
 var DATA={
-    "date": "2026-06-16",
-    "time": "2026-06-20 17:22",
+    "date": "2026-06-20",
+    "time": "2026-06-20 17:24",
     "core": [
         {
             "pi": "HBNY-GX-2026-7590",
@@ -3881,7 +3881,8 @@ var tags=mT(it),th='';if(tags.length>0||mJ(it)){th='<div class="tags">';tags.for
 var pl='';if(it.pf){pl=' · <a href="附件/'+it.pf+'" target="_blank" style="color:#2980b9;text-decoration:none;font-size:12px;background:#e8f0fe;padding:2px 6px;border-radius:3px">📎 PDF</a>'}
 return '<div class="item"><div><span class="pid" style="cursor:pointer" data-pid="'+(it.pi||'')+'" title="点击复制编号">['+(it.pi||'')+']</span> <span class="tit">'+it.ti+'</span></div><div class="detail">'+info+pl+'</div>'+th+'</div>'}
 function copyPID(p){navigator.clipboard.writeText(p).catch(function(){prompt('复制编号:',p)})}document.addEventListener('click',function(e){var p=e.target.getAttribute('data-pid');if(p){navigator.clipboard.writeText(p).catch(function(){prompt('复制编号:',p)})}});document.addEventListener('click',function(e){var p=e.target.getAttribute('data-pid');if(p){navigator.clipboard.writeText(p).catch(function(){prompt('复制编号:',p)})}});function switchDate(){sd=document.getElementById('dateSelect').value;recalcTags();filter();}
-function init(){LOADED[DATA.date]=DATA;render();var sel=document.getElementById('dateSelect');sel.innerHTML='<option value="all">📅 全部日期</option>';var dt=[];if(DATA.core)DATA.core.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});if(DATA.maybe)DATA.maybe.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});dt.sort().reverse();dt.forEach(function(d){var o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});sel.value=DATA.date;sd=DATA.date;filter()}
+function init(){LOADED[DATA.date]=DATA;render();var sel=document.getElementById('dateSelect');sel.innerHTML='<option value="all">📅 全部日期</option>';var dt=[];if(DATA.core)DATA.core.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});if(DATA.maybe)DATA.maybe.forEach(function(it){if(it.pt&&dt.indexOf(it.pt)===-1)dt.push(it.pt)});dt.push(DATA.date);
+dt.sort().reverse();dt.forEach(function(d){var o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o)});sel.value=DATA.date;sd=DATA.date;filter()}
 init();
 </script></body></html>
 
