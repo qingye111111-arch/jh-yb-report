@@ -23,7 +23,7 @@ $core_kw = @(
   "PH计","电导率","溶解氧","余氯","浊度","水质分析","在线分析",
   "检定","校验","校准",
   "发电机","发电机组","电动机","变压器","汽轮机","风机","水泵","压缩机","高低压柜","高低压开关柜","控制柜"
-)
+,"研发","线缆桥架","电子产品")
 $maybe_kw = @("备品备件","备件","阀类","阀门","密封件","管件","法兰","紧固件","滤芯","密封垫","机务备件","水处理备件","加工件","管材","钢材","五金","电气","电动头","执行器","气动头","定位器","阀门配件","密封垫片")
 function Test-Instrument($title){$ekw=@("维修","检修");foreach($kw in $ekw){if($title.IndexOf($kw)-ge 0){return "no"}}foreach($kw in $core_kw){if($title.IndexOf($kw)-ge 0){return "core"}}foreach($kw in $maybe_kw){if($title.IndexOf($kw)-ge 0){return "maybe"}}return "no"}
 
