@@ -710,3 +710,69 @@ JSON 已保存
 共 240 条公告
 [推荐投标] 39  [需核实] 34  [不相关] 167
   [1/39] HBNY-GX-2026-8057  [2/39] HBNY-GX-2026-7908  [3/39] HBNYGC-GZ-2026-0746  [4/39] LSHBGC-GZ-2026-0404  [5/39] LSHBGC-GZ-2026-0399  [6/39] HBNY-GX-2026-7951  [7/39] LSHB-GX-2026-3370  [8/39] ZBZZ-GX-2026-0477  [9/39] HBNY-GX-2026-7835  [10/39] HBNY-GX-2026-7643  [11/39] HBNY-GX-2026-7990  [12/39] HBNY-GX-2026-7580  [13/39] ZBZZGC-GZ-2026-0174  [14/39] HBNY-GX-2026-7903  [15/39] HBNY-GX-2026-7839  [16/39] HBNY-GX-2026-7895  [17/39] HBNY-GX-2026-7697  [18/39] HBNY-GX-2026-7572  [19/39] LSHB-GX-2026-3336  [20/39] LSHB-GX-2026-3335  [21/39] HBNY-GX-2026-7394  [22/39] HBNY-GX-2026-7913  [23/39] HBNY-GX-2026-7736  [24/39] HBNY-GX-2026-7720  [25/39] HBNY-GX-2026-7867  [26/39] HBNY-GX-2026-7822  [27/39] HBNY-GX-2026-7639  [28/39] HBNY-GX-2026-7630  [29/39] HBNY-GX-2026-7682  [30/39] LSHB-GX-2026-3359  [31/39] HBNY-GX-2026-7677  [32/39] HBNY-GX-2026-7650  [33/39] ZBZZ-GX-2026-0475  [34/39] HBNY-GX-2026-7558  [35/39] HBNY-GX-2026-7690  [36/39] HBNY-GX-2026-7761  [37/39] ZBZZ-GX-2026-0465  [38/39] HBNY-GX-2026-7705  [39/39] HBNY-GX-2026-76512026-06-22T09:24:53.050Z - Refresh triggered
+?param : 无法将“?param”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写，如果包括路径，请确保路径
+正确，然后再试一次。
+所在位置 C:\Users\Administrator\Desktop\工作\光大环境投标报告\check_ebid.ps1:1 字符: 1
++ ?param([string]$OutputDir = "C:\Users\Administrator\Desktop\工作\光大环境投标 ...
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (?param:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+=== 光大环境投标筛选 | 2026-06-22 ===
+正在获取公告列表...
+  第1页: 8条
+  第2页: 8条
+  第3页: 8条
+  第4页: 8条
+  第5页: 8条
+  第6页: 8条
+  第7页: 8条
+  第8页: 8条
+  第9页: 8条
+  第10页: 8条
+  第11页: 8条
+  第12页: 8条
+  第13页: 8条
+  第14页: 8条
+  第15页: 8条
+  第16页: 8条
+  第17页: 8条
+  第18页: 8条
+  第19页: 8条
+  第20页: 8条
+  第21页: 8条
+  第22页: 8条
+  第23页: 8条
+  第24页: 8条
+  第25页: 8条
+  第26页: 8条
+  第27页: 8条
+  第28页: 8条
+  第29页: 8条
+  第30页: 8条
+共 240 条公告
+[推荐投标] 32  [需核实] 43  [不相关] 165
+  [1/32] HBNY-GX-2026-8045    ↓ PDF: HBNY-GX-2026-8045_无锡锡东环保能源有限公司2026年7月份技术部电仪专业备品备件询价公告.pdf
+  [2/32] GDSW-GX-2026-2359    ↓ PDF: GDSW-GX-2026-2359_光大水务（南京）有限公司工水厂二阶段赛莱默仪表附属线缆及传感器更换采购询价公告.pdf
+  [3/32] HBNY-GX-2026-7743    ↓ PDF: HBNY-GX-2026-7743_光大现代环保能源（汨罗）有限公司2026年07月电仪备件询价公告.pdf
+  [4/32] HBNY-GX-2026-7975    ↓ PDF: HBNY-GX-2026-7975_光大环保能源（南阳）有限公司7月份电仪物资询价公告.pdf
+  [5/32] HBNY-GX-2026-7957    ↓ PDF: HBNY-GX-2026-7957_光大环保能源（三亚）有限公司2026年7月份仪控货物询价公告.pdf
+  [6/32] HBNY-GX-2026-7961  [7/32] HBNY-GX-2026-7878  [8/32] LSHB-GX-2026-3378  [9/32] HBNY-GX-2026-7997  [10/32] HBNY-GX-2026-7746  [11/32] HBNY-GX-2026-7723  [12/32] HBNY-GX-2026-7898  [13/32] HBNY-GX-2026-7929  [14/32] GDSW-GX-2026-2315  [15/32] LSHB-GX-2026-3374  [16/32] HBNY-GX-2026-8071  [17/32] HBNY-GX-2026-7686  [18/32] ZBZZ-GX-2026-0449  [19/32] HBNY-GX-2026-7976  [20/32] HBNY-GX-2026-7668  [21/32] HBNY-GX-2026-8057  [22/32] HBNY-GX-2026-7908  [23/32] HBNYGC-GZ-2026-0746  [24/32] LSHBGC-GZ-2026-0404  [25/32] LSHBGC-GZ-2026-0399  [26/32] HBNY-GX-2026-7951  [27/32] LSHB-GX-2026-3370  [28/32] ZBZZ-GX-2026-0477  [29/32] HBNY-GX-2026-7835  [30/32] HBNY-GX-2026-7643  [31/32] HBNY-GX-2026-7990  [32/32] HBNY-GX-2026-7580JSON 已保存
+? HTML 报告已生成
+正在推送到 GitHub...
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'refresh.log', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data_2026-06-21.json', LF will be replaced by CRLF the next time Git touches it
+[main e8c8e55] 姣忔棩鏇存柊 2026-06-22
+ 3 files changed, 1622 insertions(+), 3 deletions(-)
+ create mode 100644 data_2026-06-21.json
+git : To https://github.com/qingye111111-arch/jh-yb-report.git
+所在位置 C:\Users\Administrator\Desktop\工作\光大环境投标报告\check_ebid.ps1:86 字符: 1
++ git push origin main 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...h-yb-report.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   4fd7035..e8c8e55  main -> main
+? GitHub Pages 已更新
+微信推送成功
