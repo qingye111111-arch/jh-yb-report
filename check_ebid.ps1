@@ -1,5 +1,5 @@
 ﻿param([string]$OutputDir = "C:\Users\Administrator\Desktop\工作\光大环境投标报告", [switch]$SkipPush)
-. .\deploy_config.ps1
+. "$PSScriptRoot\deploy_config.ps1"
 $OutputDir = $OutputDir.TrimEnd('\')
 $script:today = (Get-Date).ToString("yyyy-MM-dd")
 $pdfDir = Join-Path $OutputDir "附件"
